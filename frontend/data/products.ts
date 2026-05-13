@@ -1,0 +1,176 @@
+import { Product } from "@/types/product";
+
+export const FEATURED_PRODUCT: Product = {
+  id: 1,
+  name: "AirFlow Pro Headphones",
+  slug: "airflow-pro-headphones",
+  description:
+    "Studio-grade sound with adaptive noise cancellation. 40-hour battery, feather-light titanium frame, and a soundstage that disappears into music.",
+  price: 349,
+  originalPrice: 499,
+  category: "Audio",
+  categorySlug: "audio",
+  brand: "SoundCraft",
+  imageUrl:
+    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=90",
+  images: [
+    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=90",
+    "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&q=90",
+  ],
+  rating: 4.9,
+  reviewCount: 2341,
+  stock: 18,
+  tags: ["wireless", "noise-cancelling", "premium"],
+  isFeatured: true,
+  isNew: false,
+};
+
+export const MOCK_PRODUCTS: Product[] = [
+  FEATURED_PRODUCT,
+  {
+    id: 2,
+    name: "Lumina Desk Lamp",
+    slug: "lumina-desk-lamp",
+    description:
+      "Circadian-tuned light with 10 colour temperatures and a whisper-quiet wireless charger built into the base.",
+    price: 129,
+    originalPrice: 169,
+    category: "Lighting",
+    categorySlug: "lighting",
+    brand: "Lumina",
+    imageUrl:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=85",
+    rating: 4.7,
+    reviewCount: 876,
+    stock: 34,
+    tags: ["desk", "wireless-charging", "circadian"],
+    isFeatured: false,
+    isNew: true,
+  },
+  {
+    id: 3,
+    name: "Obsidian Mechanical Keyboard",
+    slug: "obsidian-mechanical-keyboard",
+    description:
+      "Hot-swap 75% layout, per-key RGB, gasket-mounted PCB for that satisfying thock. Ships with linear silver switches.",
+    price: 219,
+    category: "Peripherals",
+    categorySlug: "peripherals",
+    brand: "KeyForge",
+    imageUrl:
+      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=85",
+    rating: 4.8,
+    reviewCount: 1203,
+    stock: 9,
+    tags: ["mechanical", "rgb", "hot-swap"],
+    isFeatured: false,
+    isNew: false,
+  },
+  {
+    id: 4,
+    name: "CloudWrist Ergonomic Mouse",
+    slug: "cloudwrist-ergonomic-mouse",
+    description:
+      "Sculpted for 8-hour sessions. 26K DPI optical sensor, 7 programmable buttons, near-zero latency 2.4 GHz link.",
+    price: 89,
+    originalPrice: 109,
+    category: "Peripherals",
+    categorySlug: "peripherals",
+    brand: "CloudWrist",
+    imageUrl:
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&q=85",
+    rating: 4.6,
+    reviewCount: 654,
+    stock: 41,
+    tags: ["ergonomic", "wireless", "gaming"],
+    isFeatured: false,
+    isNew: true,
+  },
+  {
+    id: 5,
+    name: "Apex 4K Monitor",
+    slug: "apex-4k-monitor",
+    description:
+      "32\" mini-LED panel, 1ms GtG, 144 Hz refresh, factory calibrated to ΔE<1. The last monitor you'll ever need.",
+    price: 799,
+    originalPrice: 999,
+    category: "Displays",
+    categorySlug: "displays",
+    brand: "Apex",
+    imageUrl:
+      "https://images.unsplash.com/photo-1547082299-de196ea013d6?w=600&q=85",
+    rating: 4.9,
+    reviewCount: 312,
+    stock: 7,
+    tags: ["4K", "mini-LED", "144hz"],
+    isFeatured: false,
+    isNew: false,
+  },
+  {
+    id: 6,
+    name: "StealthPod True Wireless",
+    slug: "stealth-pod-true-wireless",
+    description:
+      "6mm graphene drivers, IP68 waterproof, 8-hour playtime + 32-hour case. Fits like they were made for your ears.",
+    price: 179,
+    category: "Audio",
+    categorySlug: "audio",
+    brand: "SoundCraft",
+    imageUrl:
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&q=85",
+    rating: 4.5,
+    reviewCount: 1899,
+    stock: 55,
+    tags: ["earbuds", "waterproof", "wireless"],
+    isFeatured: false,
+    isNew: true,
+  },
+  {
+    id: 7,
+    name: "Folio Pro Laptop Stand",
+    slug: "folio-pro-laptop-stand",
+    description:
+      "Aerospace aluminium, 6-angle adjustment, folds flat in 3 seconds. Brings any laptop to eye level effortlessly.",
+    price: 69,
+    category: "Accessories",
+    categorySlug: "accessories",
+    brand: "FolioWorks",
+    imageUrl:
+      "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=85",
+    rating: 4.4,
+    reviewCount: 430,
+    stock: 88,
+    tags: ["aluminium", "portable", "ergonomic"],
+    isFeatured: false,
+    isNew: false,
+  },
+  {
+    id: 8,
+    name: "HyperDrive USB-C Hub",
+    slug: "hyperdrive-usbc-hub",
+    description:
+      "12-in-1 hub: 4K HDMI, 100W PD, 10Gbps USB-A × 3, SD/MicroSD, ethernet. One cable, every port.",
+    price: 99,
+    originalPrice: 119,
+    category: "Accessories",
+    categorySlug: "accessories",
+    brand: "HyperDrive",
+    imageUrl:
+      "https://images.unsplash.com/photo-1625723044792-44de16ccb4e9?w=600&q=85",
+    rating: 4.7,
+    reviewCount: 2107,
+    stock: 62,
+    tags: ["usb-c", "hub", "multiport"],
+    isFeatured: false,
+    isNew: false,
+  },
+];
+
+export const CATEGORIES = [
+  { label: "All", slug: "all" },
+  { label: "Audio", slug: "audio" },
+  { label: "Peripherals", slug: "peripherals" },
+  { label: "Displays", slug: "displays" },
+  { label: "Lighting", slug: "lighting" },
+  { label: "Accessories", slug: "accessories" },
+];

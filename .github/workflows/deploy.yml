@@ -1,0 +1,51 @@
+name: Deploy ShopSphere to GitHub Pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths: [ "frontend/**" ]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm install --legacy-peer-deps
+
+      - name: Build Next.js static export
+        working-directory: frontend
+        run: npm run build
+
+      - name: Deploy to main branch at /shop
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          ls frontend/out || (echo "ERROR: frontend/out missing" && exit 1)
+
+          rm -rf shop
+          cp -r frontend/out shop
+          touch shop/.nojekyll
+
+          git add shop/
+          git diff --cached --quiet \
+            && echo "No changes to deploy." \
+            || ( git commit -m "chore: deploy ShopSphere [skip ci]" \
+                 && git push origin main )

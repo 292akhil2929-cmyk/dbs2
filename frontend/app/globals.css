@@ -1,0 +1,59 @@
+/* Google Fonts — must come BEFORE @tailwind */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base resets ───────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: #ffffff;
+  color: #0a0a0a;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Selection colour ──────────────────────────────────────── */
+::selection {
+  background: rgba(37, 99, 235, 0.15);
+  color: #0a0a0a;
+}
+
+/* ── Scrollbar (WebKit) ────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+/* ── Utility classes ───────────────────────────────────────── */
+@layer utilities {
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/60;
+  }
+  .glass-dark {
+    @apply bg-black/60 backdrop-blur-xl border border-white/10;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+/* ── Marquee pause on hover ────────────────────────────────── */
+.marquee-wrapper:hover .marquee-track {
+  animation-play-state: paused;
+}
