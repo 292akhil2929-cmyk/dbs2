@@ -39,7 +39,7 @@ export const MOCK_PRODUCTS: Product[] = [
     categorySlug: "lighting",
     brand: "Lumina",
     imageUrl:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=85",
+      "https://images.unsplash.com/photo-1534073828943-f801091bb18c?w=600&q=85",
     rating: 4.7,
     reviewCount: 876,
     stock: 34,
@@ -98,7 +98,7 @@ export const MOCK_PRODUCTS: Product[] = [
     categorySlug: "displays",
     brand: "Apex",
     imageUrl:
-      "https://images.unsplash.com/photo-1547082299-de196ea013d6?w=600&q=85",
+      "https://images.unsplash.com/photo-1527443224154-c4a573d18dd5?w=600&q=85",
     rating: 4.9,
     reviewCount: 312,
     stock: 7,

@@ -1,6 +1,4 @@
-"use client";
-import { motion } from "framer-motion";
-import { Star, Quote } from "lucide-react";
+import { Star } from "lucide-react";
 
 const REVIEWS = [
   {
@@ -28,56 +26,32 @@ const REVIEWS = [
 
 export default function TestimonialsSection() {
   return (
-    <section className="py-24 bg-surface">
+    <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-16"
-        >
-          <p className="text-xs font-semibold text-accent uppercase tracking-widest mb-3">Customer Reviews</p>
-          <h2 className="text-4xl lg:text-5xl font-black tracking-tighter text-ink mb-4">
-            Loved by thousands.
-          </h2>
-          <p className="text-muted text-lg">Don&apos;t take our word for it.</p>
-        </motion.div>
+        <div className="text-center mb-12">
+          <p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-2">Customer Reviews</p>
+          <h2 className="text-3xl lg:text-4xl font-black tracking-tighter text-black mb-2">Loved by thousands.</h2>
+          <p className="text-gray-400 text-base">Don&apos;t take our word for it.</p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {REVIEWS.map(({ name, role, avatar, rating, text }, i) => (
-            <motion.div
-              key={name}
-              initial={{ opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.55, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ y: -4 }}
-              className="bg-white rounded-2xl border border-border p-6 flex flex-col gap-5 transition-shadow duration-300 hover:shadow-card-hover"
-            >
-              {/* Quote icon */}
-              <Quote size={20} strokeWidth={1.5} className="text-accent/30" />
-
-              {/* Stars */}
-              <div className="flex gap-0.5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {REVIEWS.map(({ name, role, avatar, rating, text }) => (
+            <div key={name} className="bg-gray-50 rounded-xl border border-gray-100 p-5">
+              <div className="flex gap-0.5 mb-3">
                 {Array.from({ length: rating }).map((_, j) => (
                   <Star key={j} size={13} strokeWidth={0} fill="#FBBF24" />
                 ))}
               </div>
-
-              {/* Text */}
-              <p className="text-sm text-muted leading-relaxed flex-1">&ldquo;{text}&rdquo;</p>
-
-              {/* Author */}
-              <div className="flex items-center gap-3 pt-2 border-t border-border">
+              <p className="text-sm text-gray-500 leading-relaxed mb-4">&ldquo;{text}&rdquo;</p>
+              <div className="flex items-center gap-3 pt-3 border-t border-gray-200">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={avatar} alt={name} className="w-9 h-9 rounded-full object-cover" />
+                <img src={avatar} alt={name} className="w-8 h-8 rounded-full object-cover" />
                 <div>
-                  <p className="text-sm font-semibold text-ink">{name}</p>
-                  <p className="text-xs text-muted">{role}</p>
+                  <p className="text-sm font-semibold text-black">{name}</p>
+                  <p className="text-xs text-gray-400">{role}</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

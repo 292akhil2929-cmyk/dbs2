@@ -1,32 +1,18 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  ShoppingBag,
-  X,
-  Plus,
-  Minus,
-  Trash2,
-  CheckCircle2,
-  ArrowRight,
-  Wifi,
-  WifiOff,
-} from "lucide-react";
+import { ShoppingBag, X, Plus, Minus, Trash2, CheckCircle2, ArrowRight, Wifi, WifiOff } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ProductGrid from "@/components/ProductGrid";
-import MarqueeBar from "@/components/MarqueeBar";
 import StatsSection from "@/components/StatsSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
-import ScrollProgress from "@/components/ScrollProgress";
 import { MOCK_PRODUCTS, FEATURED_PRODUCT } from "@/data/products";
 import { CartItem, Product } from "@/types/product";
 
 const RAILWAY_URL = "https://shopsphere-production-4454.up.railway.app";
 
-/* ─── Toast notification ───────────────────────────────────── */
 interface Toast { id: number; message: string; }
 let toastId = 0;
 
@@ -39,13 +25,11 @@ export default function HomePage() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [checkoutDone, setCheckoutDone] = useState(false);
 
-  /* ── Fetch live products from Railway backend ── */
   useEffect(() => {
     fetch(`${RAILWAY_URL}/api/products`)
       .then(r => r.json())
       .then((data: { id: number; name: string; price: number; description?: string }[]) => {
         if (!Array.isArray(data) || data.length === 0) return;
-        // Map Railway schema → Product type, filling in mock image assets
         const mapped: Product[] = data.map((p, i) => ({
           id: p.id,
           name: p.name,
@@ -67,13 +51,13 @@ export default function HomePage() {
         setFeaturedProduct(mapped[0]);
         setLiveData(true);
       })
-      .catch(() => { /* stay on mock data */ });
+      .catch(() => {});
   }, []);
 
   const showToast = useCallback((message: string) => {
     const id = ++toastId;
     setToasts(prev => [...prev, { id, message }]);
-    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3500);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3000);
   }, []);
 
   const addToCart = useCallback((product: Product) => {
@@ -96,6 +80,10 @@ export default function HomePage() {
     setCartItems(prev => prev.filter(i => i.product.id !== id));
   }, []);
 
+  const subtotal = cartItems.reduce((s, i) => s + i.product.price * i.quantity, 0);
+  const totalItems = cartItems.reduce((s, i) => s + i.quantity, 0);
+  const shippingFee = subtotal >= 200 ? 0 : 15;
+
   const handleCheckout = useCallback(async () => {
     const orderItems = cartItems.map(i => ({ productId: i.product.id, quantity: i.quantity, price: i.product.price }));
     try {
@@ -104,22 +92,16 @@ export default function HomePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items: orderItems, total: subtotal }),
       });
-    } catch { /* no-op if offline */ }
+    } catch { /* offline fallback */ }
     setCheckoutDone(true);
     setCartItems([]);
     setTimeout(() => setCheckoutDone(false), 4000);
-    showToast("Order placed successfully! 🎉");
-  }, [cartItems]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const subtotal = cartItems.reduce((s, i) => s + i.product.price * i.quantity, 0);
-  const totalItems = cartItems.reduce((s, i) => s + i.quantity, 0);
-  const shippingFee = subtotal >= 200 ? 0 : 15;
+    showToast("Order placed successfully!");
+  }, [cartItems, subtotal, showToast]);
 
   return (
-    <main className="min-h-screen">
-      <ScrollProgress />
+    <main className="min-h-screen bg-white">
       <Navbar cartItems={cartItems} onCartOpen={() => setCartOpen(true)} />
-      <MarqueeBar />
       <HeroSection product={featuredProduct} onAddToCart={addToCart} />
       <StatsSection />
       <div className="section-divider" />
@@ -129,53 +111,37 @@ export default function HomePage() {
       <div className="section-divider" />
       <TestimonialsSection />
 
-      {/* ── DB Status Banner ── */}
-      <div className={`fixed bottom-4 right-4 z-40 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium shadow-lg transition-all
-        ${liveData ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-gray-50 text-gray-500 border border-gray-200"}`}>
-        {liveData
-          ? <><Wifi size={12} /><span>Live · Railway DB</span></>
-          : <><WifiOff size={12} /><span>Offline · Mock data</span></>}
-      </div>
-
-      {/* ── Newsletter CTA ── */}
-      <motion.section
-        initial={{ opacity: 0, y: 32 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="bg-ink py-20"
-      >
+      {/* Newsletter */}
+      <section className="bg-black py-16">
         <div className="max-w-2xl mx-auto px-6 text-center">
-          <p className="text-xs font-semibold text-accent uppercase tracking-widest mb-3">Stay in the loop</p>
-          <h2 className="text-4xl font-black tracking-tighter text-white mb-4">
-            Get early access to drops.
-          </h2>
-          <p className="text-white/50 text-base mb-8 max-w-md mx-auto">
-            New arrivals, exclusive deals, and tech news — straight to your inbox. Unsubscribe anytime.
-          </p>
+          <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-3">Stay in the loop</p>
+          <h2 className="text-3xl font-black tracking-tighter text-white mb-3">Get early access to drops.</h2>
+          <p className="text-gray-400 text-sm mb-7">New arrivals, exclusive deals, and tech news — straight to your inbox.</p>
           <form onSubmit={e => e.preventDefault()} className="flex gap-3 max-w-md mx-auto">
             <input type="email" placeholder="you@example.com" required
-              className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 text-sm focus:outline-none focus:border-accent transition-colors" />
+              className="flex-1 px-4 py-2.5 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 text-sm focus:outline-none focus:border-white/40" />
             <button type="submit"
-              className="px-5 py-3 bg-accent text-white rounded-xl font-semibold text-sm hover:bg-blue-700 transition-colors whitespace-nowrap">
+              className="px-5 py-2.5 bg-white text-black rounded-xl font-semibold text-sm hover:bg-gray-100 transition-colors whitespace-nowrap">
               Subscribe
             </button>
           </form>
         </div>
-      </motion.section>
+      </section>
 
-      {/* ── Footer ── */}
-      <footer className="bg-white border-t border-border">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
             <div className="col-span-2 md:col-span-1">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-7 h-7 bg-ink rounded-lg flex items-center justify-center">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 bg-black rounded-lg flex items-center justify-center">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                  </svg>
                 </div>
-                <span className="font-black text-ink text-lg tracking-tight">ShopSphere</span>
+                <span className="font-black text-black text-base tracking-tight">ShopSphere</span>
               </div>
-              <p className="text-sm text-muted leading-relaxed max-w-[200px]">
+              <p className="text-sm text-gray-400 max-w-[180px]">
                 Premium tech, thoughtfully curated. Free shipping across the UAE.
               </p>
             </div>
@@ -185,177 +151,160 @@ export default function HomePage() {
               { title: "Company", links: ["About", "Blog", "Careers", "Press"] },
             ].map(col => (
               <div key={col.title}>
-                <h4 className="font-semibold text-ink text-sm mb-4">{col.title}</h4>
-                <ul className="space-y-2.5">
+                <h4 className="font-semibold text-black text-sm mb-3">{col.title}</h4>
+                <ul className="space-y-2">
                   {col.links.map(l => (
-                    <li key={l}><a href="#" className="text-sm text-muted hover:text-ink transition-colors duration-200">{l}</a></li>
+                    <li key={l}>
+                      <a href="#" className="text-sm text-gray-400 hover:text-black transition-colors">{l}</a>
+                    </li>
                   ))}
                 </ul>
               </div>
             ))}
           </div>
-          <div className="border-t border-border pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-subtle">© 2025 ShopSphere. CS F212 DBMS Project — BITS Pilani Dubai.</p>
+          <div className="border-t border-gray-100 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <p className="text-xs text-gray-400">© 2025 ShopSphere. CS F212 DBMS Project — BITS Pilani Dubai.</p>
             <div className="flex items-center gap-4">
-              <p className="text-xs text-subtle">Next.js · Tailwind · Railway PostgreSQL</p>
-              <div className="flex gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" title="Backend live" />
-                <span className="text-xs text-subtle">DB Live</span>
+              <p className="text-xs text-gray-400">Next.js · Tailwind · Railway PostgreSQL</p>
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span className="text-xs text-gray-400">DB Live</span>
               </div>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* ── Cart Drawer ── */}
-      <AnimatePresence>
-        {cartOpen && (
-          <>
-            <motion.div key="backdrop"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
-              onClick={() => setCartOpen(false)} />
+      {/* DB status */}
+      <div className={`fixed bottom-4 right-4 z-40 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium shadow border
+        ${liveData ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-gray-50 text-gray-500 border-gray-200"}`}>
+        {liveData
+          ? <><Wifi size={11} /><span>Live · Railway DB</span></>
+          : <><WifiOff size={11} /><span>Offline · Mock data</span></>}
+      </div>
 
-            <motion.aside key="drawer"
-              initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 340, damping: 38 }}
-              className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-md bg-white shadow-2xl flex flex-col">
-
-              {/* Header */}
-              <div className="flex items-center justify-between px-6 py-5 border-b border-border">
-                <div className="flex items-center gap-3">
-                  <ShoppingBag size={20} strokeWidth={1.75} />
-                  <h2 className="font-bold text-ink text-lg">Your Cart</h2>
-                  {totalItems > 0 && (
-                    <span className="w-5 h-5 bg-ink text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                      {totalItems}
-                    </span>
-                  )}
-                </div>
-                <button onClick={() => setCartOpen(false)}
-                  className="p-2 rounded-xl text-muted hover:text-ink hover:bg-surface transition-all">
-                  <X size={18} />
-                </button>
-              </div>
-
-              {/* Items */}
-              <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
-                {checkoutDone ? (
-                  <div className="flex flex-col items-center justify-center h-64 text-center">
-                    <CheckCircle2 size={48} strokeWidth={1.5} className="text-emerald-500 mb-4" />
-                    <p className="font-bold text-ink text-lg mb-1">Order Placed!</p>
-                    <p className="text-sm text-muted">We&apos;ve received your order. Check your email for confirmation.</p>
-                  </div>
-                ) : cartItems.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-64 text-center">
-                    <ShoppingBag size={48} strokeWidth={1} className="text-border mb-4" />
-                    <p className="font-semibold text-ink mb-1">Your cart is empty</p>
-                    <p className="text-sm text-muted">Add something you love.</p>
-                    <button onClick={() => setCartOpen(false)}
-                      className="mt-6 flex items-center gap-2 text-sm font-semibold text-accent">
-                      Browse Products <ArrowRight size={14} strokeWidth={2} />
-                    </button>
-                  </div>
-                ) : (
-                  <AnimatePresence>
-                    {cartItems.map(item => (
-                      <motion.div key={item.product.id} layout
-                        initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 24, height: 0 }} transition={{ duration: 0.25 }}
-                        className="flex gap-4 p-4 rounded-2xl border border-border bg-surface">
-                        <div className="w-16 h-16 rounded-xl overflow-hidden bg-white flex-shrink-0">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={item.product.imageUrl} alt={item.product.name} className="w-full h-full object-cover" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs text-muted truncate">{item.product.brand}</p>
-                          <p className="font-semibold text-sm text-ink truncate">{item.product.name}</p>
-                          <p className="font-bold text-ink mt-1">AED {item.product.price}</p>
-                          <div className="flex items-center gap-3 mt-2">
-                            <div className="flex items-center gap-2 border border-border rounded-xl">
-                              <button onClick={() => updateQty(item.product.id, -1)}
-                                className="p-1.5 hover:bg-surface rounded-l-xl transition-colors">
-                                <Minus size={12} strokeWidth={2.5} />
-                              </button>
-                              <span className="text-sm font-semibold w-6 text-center">{item.quantity}</span>
-                              <button onClick={() => updateQty(item.product.id, 1)}
-                                className="p-1.5 hover:bg-surface rounded-r-xl transition-colors">
-                                <Plus size={12} strokeWidth={2.5} />
-                              </button>
-                            </div>
-                            <button onClick={() => removeItem(item.product.id)}
-                              className="text-muted hover:text-red-500 transition-colors">
-                              <Trash2 size={14} strokeWidth={1.75} />
-                            </button>
-                          </div>
-                        </div>
-                        <div className="text-sm font-bold text-ink whitespace-nowrap">
-                          AED {(item.product.price * item.quantity).toLocaleString()}
-                        </div>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
+      {/* Cart drawer */}
+      {cartOpen && (
+        <>
+          <div className="fixed inset-0 bg-black/40 z-50" onClick={() => setCartOpen(false)} />
+          <aside className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-md bg-white shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <ShoppingBag size={18} strokeWidth={1.75} />
+                <h2 className="font-bold text-black text-base">Your Cart</h2>
+                {totalItems > 0 && (
+                  <span className="w-5 h-5 bg-black text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {totalItems}
+                  </span>
                 )}
               </div>
+              <button onClick={() => setCartOpen(false)}
+                className="p-2 rounded-lg text-gray-400 hover:text-black hover:bg-gray-50 transition-colors">
+                <X size={18} />
+              </button>
+            </div>
 
-              {/* Footer */}
-              {cartItems.length > 0 && !checkoutDone && (
-                <div className="border-t border-border px-6 py-6 space-y-3">
-                  {/* Free shipping progress */}
-                  {subtotal < 200 && (
-                    <div>
-                      <div className="flex justify-between text-xs text-muted mb-1.5">
-                        <span>Free shipping at AED 200</span>
-                        <span>AED {200 - subtotal} to go</span>
-                      </div>
-                      <div className="w-full h-1.5 bg-border rounded-full overflow-hidden">
-                        <motion.div className="h-full bg-ink rounded-full"
-                          initial={{ width: 0 }}
-                          animate={{ width: `${Math.min((subtotal / 200) * 100, 100)}%` }}
-                          transition={{ duration: 0.4 }} />
-                      </div>
-                    </div>
-                  )}
-                  <div className="flex justify-between text-sm text-muted">
-                    <span>Subtotal</span>
-                    <span className="font-semibold text-ink">AED {subtotal.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between text-sm text-muted">
-                    <span>Shipping</span>
-                    <span className={shippingFee === 0 ? "text-emerald-600 font-medium" : ""}>
-                      {shippingFee === 0 ? "Free" : `AED ${shippingFee}`}
-                    </span>
-                  </div>
-                  <div className="flex justify-between font-bold text-ink text-base border-t border-border pt-3">
-                    <span>Total</span>
-                    <span>AED {(subtotal + shippingFee).toLocaleString()}</span>
-                  </div>
-                  <button onClick={handleCheckout}
-                    className="w-full py-4 bg-ink text-white rounded-2xl font-bold text-sm hover:opacity-90 active:scale-95 transition-all shadow-float">
-                    Place Order →
+            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3">
+              {checkoutDone ? (
+                <div className="flex flex-col items-center justify-center h-64 text-center">
+                  <CheckCircle2 size={44} strokeWidth={1.5} className="text-emerald-500 mb-3" />
+                  <p className="font-bold text-black text-lg mb-1">Order Placed!</p>
+                  <p className="text-sm text-gray-400">We&apos;ve received your order.</p>
+                </div>
+              ) : cartItems.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-64 text-center">
+                  <ShoppingBag size={44} strokeWidth={1} className="text-gray-200 mb-3" />
+                  <p className="font-semibold text-black mb-1">Your cart is empty</p>
+                  <p className="text-sm text-gray-400 mb-5">Add something you love.</p>
+                  <button onClick={() => setCartOpen(false)}
+                    className="flex items-center gap-2 text-sm font-semibold text-blue-600">
+                    Browse Products <ArrowRight size={14} strokeWidth={2} />
                   </button>
                 </div>
+              ) : (
+                cartItems.map(item => (
+                  <div key={item.product.id} className="flex gap-4 p-3 rounded-xl border border-gray-100 bg-gray-50">
+                    <div className="w-14 h-14 rounded-lg overflow-hidden bg-white flex-shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={item.product.imageUrl} alt={item.product.name} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-gray-400">{item.product.brand}</p>
+                      <p className="font-semibold text-sm text-black truncate">{item.product.name}</p>
+                      <p className="font-bold text-black text-sm mt-0.5">AED {item.product.price}</p>
+                      <div className="flex items-center gap-3 mt-2">
+                        <div className="flex items-center gap-1 border border-gray-200 rounded-lg overflow-hidden">
+                          <button onClick={() => updateQty(item.product.id, -1)}
+                            className="px-2 py-1 hover:bg-gray-100 transition-colors">
+                            <Minus size={11} strokeWidth={2.5} />
+                          </button>
+                          <span className="text-sm font-semibold w-5 text-center">{item.quantity}</span>
+                          <button onClick={() => updateQty(item.product.id, 1)}
+                            className="px-2 py-1 hover:bg-gray-100 transition-colors">
+                            <Plus size={11} strokeWidth={2.5} />
+                          </button>
+                        </div>
+                        <button onClick={() => removeItem(item.product.id)}
+                          className="text-gray-400 hover:text-red-500 transition-colors">
+                          <Trash2 size={13} strokeWidth={1.75} />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="text-sm font-bold text-black whitespace-nowrap">
+                      AED {(item.product.price * item.quantity).toLocaleString()}
+                    </div>
+                  </div>
+                ))
               )}
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
+            </div>
 
-      {/* ── Toast stack ── */}
+            {cartItems.length > 0 && !checkoutDone && (
+              <div className="border-t border-gray-100 px-6 py-5 space-y-3">
+                {subtotal < 200 && (
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-400 mb-1">
+                      <span>Free shipping at AED 200</span>
+                      <span>AED {200 - subtotal} to go</span>
+                    </div>
+                    <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-black rounded-full transition-all duration-300"
+                        style={{ width: `${Math.min((subtotal / 200) * 100, 100)}%` }} />
+                    </div>
+                  </div>
+                )}
+                <div className="flex justify-between text-sm text-gray-400">
+                  <span>Subtotal</span>
+                  <span className="font-semibold text-black">AED {subtotal.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-400">
+                  <span>Shipping</span>
+                  <span className={shippingFee === 0 ? "text-emerald-600 font-medium" : ""}>
+                    {shippingFee === 0 ? "Free" : `AED ${shippingFee}`}
+                  </span>
+                </div>
+                <div className="flex justify-between font-bold text-black border-t border-gray-100 pt-3">
+                  <span>Total</span>
+                  <span>AED {(subtotal + shippingFee).toLocaleString()}</span>
+                </div>
+                <button onClick={handleCheckout}
+                  className="w-full py-3.5 bg-black text-white rounded-xl font-bold text-sm hover:bg-gray-800 transition-colors">
+                  Place Order →
+                </button>
+              </div>
+            )}
+          </aside>
+        </>
+      )}
+
+      {/* Toast */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] flex flex-col items-center gap-2 pointer-events-none">
-        <AnimatePresence>
-          {toasts.map(toast => (
-            <motion.div key={toast.id}
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 28 }}
-              className="flex items-center gap-2.5 px-5 py-3 bg-ink text-white rounded-2xl text-sm font-medium shadow-toast whitespace-nowrap">
-              <CheckCircle2 size={15} strokeWidth={2} className="text-emerald-400" />
-              {toast.message}
-            </motion.div>
-          ))}
-        </AnimatePresence>
+        {toasts.map(toast => (
+          <div key={toast.id}
+            className="flex items-center gap-2 px-4 py-2.5 bg-black text-white rounded-xl text-sm font-medium shadow-lg whitespace-nowrap">
+            <CheckCircle2 size={14} strokeWidth={2} className="text-emerald-400" />
+            {toast.message}
+          </div>
+        ))}
       </div>
     </main>
   );

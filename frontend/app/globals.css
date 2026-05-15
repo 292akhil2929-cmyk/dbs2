@@ -1,86 +1,31 @@
-/* Google Fonts — before @tailwind */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ── Base ──────────────────────────────────────────────────── */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: #fafafa;
+  background: #ffffff;
   color: #0a0a0a;
   font-family: "Inter", system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
 }
 
-::selection { background: rgba(37,99,235,0.14); color: #0a0a0a; }
+::selection { background: rgba(37,99,235,0.12); color: #0a0a0a; }
 
-::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
 
-/* ── Utility layers ────────────────────────────────────────── */
-@layer utilities {
-  .glass {
-    @apply bg-white/80 backdrop-blur-xl border border-white/60;
-  }
-  .glass-dark {
-    @apply bg-black/60 backdrop-blur-xl border border-white/10;
-  }
-  .text-balance { text-wrap: balance; }
-  .no-scrollbar::-webkit-scrollbar { display: none; }
-  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-  /* Section fade-up — toggled by Framer via whileInView */
-  .reveal {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
-  }
-  .reveal.in {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ── Marquee ───────────────────────────────────────────────── */
-.marquee-wrapper:hover .marquee-track { animation-play-state: paused; }
-
-/* ── Scroll progress bar ───────────────────────────────────── */
-#scroll-progress {
-  position: fixed;
-  top: 0; left: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #2563eb 0%, #7c3aed 50%, #2563eb 100%);
-  background-size: 200% 100%;
-  animation: shimmer 2.5s linear infinite;
-  z-index: 9999;
-  transform-origin: left;
-  transition: none;
-}
-
-@keyframes shimmer {
-  0%   { background-position: 0% 0%; }
-  100% { background-position: 200% 0%; }
-}
-
-/* ── Section divider ───────────────────────────────────────── */
 .section-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, #e5e7eb 20%, #e5e7eb 80%, transparent);
-}
-
-/* ── Feature card glow on hover ────────────────────────────── */
-.feature-card:hover {
-  box-shadow: 0 0 0 1px rgba(37,99,235,0.12), 0 8px 32px rgba(37,99,235,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  background: #f3f4f6;
 }
