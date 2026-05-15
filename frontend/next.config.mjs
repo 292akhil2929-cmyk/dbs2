@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",             // static HTML/CSS/JS for GitHub Pages
-  basePath: "/shopsphere",      // GitHub Pages: https://<user>.github.io/shopsphere
-  assetPrefix: "/shopsphere",
+  output: "export",
+  basePath: "/dbs2",
+  assetPrefix: "/dbs2",
   images: {
     unoptimized: true,
     remotePatterns: [

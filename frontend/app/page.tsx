@@ -17,6 +17,10 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ProductGrid from "@/components/ProductGrid";
 import MarqueeBar from "@/components/MarqueeBar";
+import StatsSection from "@/components/StatsSection";
+import FeaturesSection from "@/components/FeaturesSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import ScrollProgress from "@/components/ScrollProgress";
 import { MOCK_PRODUCTS, FEATURED_PRODUCT } from "@/data/products";
 import { CartItem, Product } from "@/types/product";
 
@@ -113,10 +117,17 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen">
+      <ScrollProgress />
       <Navbar cartItems={cartItems} onCartOpen={() => setCartOpen(true)} />
       <MarqueeBar />
       <HeroSection product={featuredProduct} onAddToCart={addToCart} />
+      <StatsSection />
+      <div className="section-divider" />
       <ProductGrid products={products} onAddToCart={addToCart} />
+      <div className="section-divider" />
+      <FeaturesSection />
+      <div className="section-divider" />
+      <TestimonialsSection />
 
       {/* ── DB Status Banner ── */}
       <div className={`fixed bottom-4 right-4 z-40 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium shadow-lg transition-all
@@ -126,13 +137,45 @@ export default function HomePage() {
           : <><WifiOff size={12} /><span>Offline · Mock data</span></>}
       </div>
 
+      {/* ── Newsletter CTA ── */}
+      <motion.section
+        initial={{ opacity: 0, y: 32 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="bg-ink py-20"
+      >
+        <div className="max-w-2xl mx-auto px-6 text-center">
+          <p className="text-xs font-semibold text-accent uppercase tracking-widest mb-3">Stay in the loop</p>
+          <h2 className="text-4xl font-black tracking-tighter text-white mb-4">
+            Get early access to drops.
+          </h2>
+          <p className="text-white/50 text-base mb-8 max-w-md mx-auto">
+            New arrivals, exclusive deals, and tech news — straight to your inbox. Unsubscribe anytime.
+          </p>
+          <form onSubmit={e => e.preventDefault()} className="flex gap-3 max-w-md mx-auto">
+            <input type="email" placeholder="you@example.com" required
+              className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 text-sm focus:outline-none focus:border-accent transition-colors" />
+            <button type="submit"
+              className="px-5 py-3 bg-accent text-white rounded-xl font-semibold text-sm hover:bg-blue-700 transition-colors whitespace-nowrap">
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </motion.section>
+
       {/* ── Footer ── */}
-      <footer className="border-t border-border bg-surface py-16">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+      <footer className="bg-white border-t border-border">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
             <div className="col-span-2 md:col-span-1">
-              <h3 className="font-black text-ink text-xl tracking-tight mb-3">ShopSphere</h3>
-              <p className="text-sm text-muted leading-relaxed max-w-xs">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-7 h-7 bg-ink rounded-lg flex items-center justify-center">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <span className="font-black text-ink text-lg tracking-tight">ShopSphere</span>
+              </div>
+              <p className="text-sm text-muted leading-relaxed max-w-[200px]">
                 Premium tech, thoughtfully curated. Free shipping across the UAE.
               </p>
             </div>
@@ -145,7 +188,7 @@ export default function HomePage() {
                 <h4 className="font-semibold text-ink text-sm mb-4">{col.title}</h4>
                 <ul className="space-y-2.5">
                   {col.links.map(l => (
-                    <li key={l}><a href="#" className="text-sm text-muted hover:text-ink transition-colors">{l}</a></li>
+                    <li key={l}><a href="#" className="text-sm text-muted hover:text-ink transition-colors duration-200">{l}</a></li>
                   ))}
                 </ul>
               </div>
@@ -153,7 +196,13 @@ export default function HomePage() {
           </div>
           <div className="border-t border-border pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-xs text-subtle">© 2025 ShopSphere. CS F212 DBMS Project — BITS Pilani Dubai.</p>
-            <p className="text-xs text-subtle">Next.js · Tailwind · Railway PostgreSQL</p>
+            <div className="flex items-center gap-4">
+              <p className="text-xs text-subtle">Next.js · Tailwind · Railway PostgreSQL</p>
+              <div className="flex gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" title="Backend live" />
+                <span className="text-xs text-subtle">DB Live</span>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

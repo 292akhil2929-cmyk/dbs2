@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ShoppingBag, Star, ArrowRight, Sparkles } from "lucide-react";
+import { ShoppingBag, Star, ArrowRight, Sparkles, ChevronDown } from "lucide-react";
 import { Product } from "@/types/product";
 
 interface HeroSectionProps {
@@ -44,9 +44,10 @@ export default function HeroSection({ product, onAddToCart }: HeroSectionProps) 
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
 
-  const imgY = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 40]);
-  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const imgY   = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
+  const textY  = useTransform(scrollYProgress, [0, 1], ["0%", "8%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
+  const hintOp  = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
 
   const discount = DISCOUNT(product);
 
@@ -170,24 +171,17 @@ export default function HeroSection({ product, onAddToCart }: HeroSectionProps) 
               </div>
             </motion.div>
 
-            {/* Tags */}
-            {product.tags && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 1.1 }}
-                className="flex items-center gap-2 mt-8 flex-wrap"
-              >
-                {product.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs text-muted border border-border px-2.5 py-1 rounded-full capitalize"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </motion.div>
-            )}
+            {/* Trust chips */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 1.15 }}
+              className="flex items-center gap-5 mt-7 flex-wrap">
+              {["Free shipping", "2-yr warranty", "30-day returns"].map(chip => (
+                <span key={chip} className="flex items-center gap-1.5 text-xs text-muted font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+                  {chip}
+                </span>
+              ))}
+            </motion.div>
           </motion.div>
 
           {/* ── Right: Floating product card ── */}
@@ -301,21 +295,13 @@ export default function HeroSection({ product, onAddToCart }: HeroSectionProps) 
         </div>
       </div>
 
-      {/* Scroll cue */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      >
-        <span className="text-xs text-subtle font-medium tracking-widest uppercase">
-          Scroll
-        </span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="w-px h-8 bg-gradient-to-b from-subtle to-transparent"
-        />
+      {/* Scroll cue — fades as you scroll */}
+      <motion.div style={{ opacity: hintOp }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 pointer-events-none">
+        <span className="text-[10px] text-subtle font-medium tracking-[0.3em] uppercase">Scroll</span>
+        <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}>
+          <ChevronDown size={16} strokeWidth={1.75} className="text-subtle" />
+        </motion.div>
       </motion.div>
     </section>
   );
