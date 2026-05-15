@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ShopSphere — CS F212 Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;--bg2:#111118;--bg3:#1a1a24;--border:#2a2a38;
+  --text:#e8e8f0;--muted:#7070a0;--white:#ffffff;
+  --blue:#4f8ef7;--green:#34d399;--amber:#fbbf24;--red:#f87171;--purple:#a78bfa;--pink:#f472b6;
+}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.65}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+code,pre{font-family:'JetBrains Mono',monospace}
+code{background:#1e1e2e;color:#e8e8f0;padding:2px 7px;border-radius:4px;font-size:12.5px}
+pre{background:#0d1117;color:#e6edf3;padding:1.2rem 1.4rem;border-radius:10px;overflow-x:auto;font-size:12px;line-height:1.8;border:1px solid var(--border);margin:1rem 0}
+pre code{background:none;padding:0;font-size:inherit}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:0;height:52px;overflow-x:auto}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-logo{font-weight:800;font-size:14px;color:var(--white);margin-right:1.5rem;white-space:nowrap;letter-spacing:-0.02em}
+.nav-link{padding:6px 12px;font-size:12.5px;font-weight:500;color:var(--muted);white-space:nowrap;border-radius:6px;transition:all .15s}
+.nav-link:hover{color:var(--white);text-decoration:none;background:var(--bg3)}
+
+/* COVER */
+.cover{background:linear-gradient(135deg,#0a0a0f 0%,#0f0f1e 50%,#0a0a0f 100%);padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.cover::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(79,142,247,0.12) 0%,transparent 70%);pointer-events:none}
+.cover-badge{display:inline-block;padding:4px 14px;background:rgba(79,142,247,0.12);border:1px solid rgba(79,142,247,0.3);border-radius:100px;color:var(--blue);font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.5rem}
+.cover h1{font-size:clamp(2.8rem,7vw,5rem);font-weight:900;letter-spacing:-.05em;line-height:1;color:var(--white);margin-bottom:.75rem}
+.cover h1 span{color:var(--blue)}
+.cover-sub{color:var(--muted);font-size:1.1rem;margin-bottom:2rem}
+.cover-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:2.5rem}
+.link-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600;border:1px solid;transition:all .15s;cursor:pointer}
+.link-pill:hover{text-decoration:none;opacity:.85}
+.pill-github{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);color:var(--white)}
+.pill-live{background:rgba(52,211,153,0.12);border-color:rgba(52,211,153,0.3);color:var(--green)}
+.pill-api{background:rgba(167,139,250,0.12);border-color:rgba(167,139,250,0.3);color:var(--purple)}
+.cover-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:2rem;margin-top:2rem}
+.stat{text-align:center}
+.stat-n{font-size:2.2rem;font-weight:900;color:var(--white);line-height:1}
+.stat-l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
+.warn{display:inline-block;margin-top:1.5rem;padding:10px 20px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:10px;color:var(--amber);font-size:13px;max-width:620px}
+
+/* SECTIONS */
+.section{padding:3.5rem 2rem;border-bottom:1px solid var(--border)}
+.container{max-width:1100px;margin:0 auto}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:2rem}
+.sec-num{width:38px;height:38px;background:var(--blue);border-radius:9px;font-size:14px;font-weight:800;color:#000;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;color:var(--white)}
+h3{font-size:1.1rem;font-weight:700;color:var(--white);margin:2rem 0 .6rem;letter-spacing:-.02em}
+h4{font-size:.95rem;font-weight:600;color:#c0c0e0;margin:1.2rem 0 .4rem}
+p{color:#b0b0c8;margin-bottom:.75rem}
+ul,ol{padding-left:1.3rem;margin:.4rem 0 .75rem}
+li{color:#b0b0c8;margin-bottom:3px}
+strong{color:var(--white);font-weight:600}
+
+/* GITHUB LINK BADGE */
+.gh{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:#161b22;border:1px solid #30363d;border-radius:6px;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#58a6ff;transition:all .15s}
+.gh:hover{border-color:#58a6ff;text-decoration:none}
+.gh svg{flex-shrink:0}
+
+/* CARDS */
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin:1rem 0}
+.grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:1rem 0}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.3rem}
+.card-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.c-blue .card-title{color:var(--blue)}
+.c-green .card-title{color:var(--green)}
+.c-amber .card-title{color:var(--amber)}
+.c-red .card-title{color:var(--red)}
+.c-purple .card-title{color:var(--purple)}
+.c-pink .card-title{color:var(--pink)}
+.card p{font-size:13px;margin:0;color:#9090b8}
+
+/* TABLES */
+.tw{overflow-x:auto;margin:1rem 0;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#0d1117;color:var(--muted);padding:9px 13px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+td{padding:9px 13px;border-bottom:1px solid var(--border);color:#b0b0c8;vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.02)}
+
+/* FD BOX */
+.fd{background:#0d1117;border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.5rem;margin:1rem 0;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:2}
+.fk{color:#fbbf24}
+.fa{color:#9ca3af}
+.fv{color:#86efac}
+.fc{color:#4b5563;font-size:11px}
+
+/* OBJECT BLOCKS */
+.obj{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.4rem;margin:1.2rem 0}
+.obj-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:.75rem}
+.badge{padding:3px 9px;border-radius:5px;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.b-view{background:#1e1b4b;color:#a5b4fc}
+.b-func{background:#1a2e1a;color:#86efac}
+.b-trig{background:#2d1b1b;color:#fca5a5}
+.b-proc{background:#1e1b2e;color:#c4b5fd}
+.b-before{background:#292515;color:#fcd34d}
+.b-after{background:#152220;color:#6ee7b7}
+.b-insert{background:#1f2d1f;color:#86efac}
+.b-update{background:#1a2535;color:#93c5fd}
+.b-delete{background:#2d1a1a;color:#fca5a5}
+.obj-name{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--white)}
+.obj-desc{font-size:13px;color:#9090b8;margin-bottom:.6rem}
+
+/* QA */
+.qa{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px}
+.qa-q{background:#0d1117;padding:10px 15px;font-size:13.5px;font-weight:600;color:var(--white);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.qa-q::after{content:'▼';font-size:10px;color:var(--muted);transition:transform .2s}
+.qa-q.open::after{transform:rotate(180deg)}
+.qa-a{display:none;padding:12px 15px;font-size:13.5px;color:#b0b0c8;line-height:1.65}
+.qa-a.show{display:block}
+
+/* REPO TREE */
+.tree{background:#0d1117;border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:2}
+.tree-dir{color:var(--blue);font-weight:600}
+.tree-file a{color:#c9d1d9}
+.tree-file a:hover{color:var(--blue)}
+.tree-note{color:#4b5563;font-size:11px}
+
+/* FEATURE MAP */
+.feat{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin:1rem 0}
+.feat-cell{background:var(--bg2);padding:10px 13px;font-size:12.5px}
+.feat-head{background:#0d1117;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:2rem;margin:1rem 0}
+.timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:1.2rem}
+.tl-dot{position:absolute;left:-1.65rem;top:4px;width:14px;height:14px;border-radius:50%;background:var(--blue);border:2px solid var(--bg)}
+.tl-title{font-size:13.5px;font-weight:600;color:var(--white);margin-bottom:3px}
+.tl-desc{font-size:12.5px;color:var(--muted)}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:1.5rem 0}
+
+/* PRINT */
+@media print{
+  nav{display:none}
+  .cover{padding:2rem}
+  pre{font-size:10px}
+  body{background:#fff;color:#111}
+  .bg-section{background:#f5f5f5 !important}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+<div class="nav-inner">
+  <div class="nav-logo">⚡ ShopSphere Study Guide</div>
+  <a class="nav-link" href="#repo">Repository</a>
+  <a class="nav-link" href="#tour">Website Tour</a>
+  <a class="nav-link" href="#tables">20 Tables</a>
+  <a class="nav-link" href="#norm">Normalization</a>
+  <a class="nav-link" href="#views">Views</a>
+  <a class="nav-link" href="#funcs">Functions</a>
+  <a class="nav-link" href="#triggers">Triggers</a>
+  <a class="nav-link" href="#procs">Procedures</a>
+  <a class="nav-link" href="#queries">Queries</a>
+  <a class="nav-link" href="#frontend">Frontend</a>
+  <a class="nav-link" href="#map">Feature Map</a>
+  <a class="nav-link" href="#cheat">Cheat Sheet</a>
+</div>
+</nav>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-badge">CS F212 · Database Systems · BITS Pilani Dubai · 2025–26</div>
+  <h1>Shop<span>Sphere</span></h1>
+  <p class="cover-sub">Full-Stack E-Commerce · MySQL 8 · Next.js 14 · Railway · GitHub Pages</p>
+  <div class="cover-links">
+    <a class="link-pill pill-github" href="https://github.com/292akhil2929-cmyk/dbs2" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      github.com/292akhil2929-cmyk/dbs2
+    </a>
+    <a class="link-pill pill-live" href="https://292akhil2929-cmyk.github.io/dbs2" target="_blank">
+      🌐 Live Site — github.io/dbs2
+    </a>
+    <a class="link-pill pill-api" href="https://shopsphere-production-4454.up.railway.app" target="_blank">
+      ⚙️ Railway API
+    </a>
+    <a class="link-pill pill-live" href="https://292akhil2929-cmyk.github.io/dbs2/study" target="_blank">
+      📖 This Study Guide
+    </a>
+  </div>
+  <div class="cover-stats">
+    <div class="stat"><div class="stat-n">20</div><div class="stat-l">Tables</div></div>
+    <div class="stat"><div class="stat-n">7</div><div class="stat-l">Views</div></div>
+    <div class="stat"><div class="stat-n">7</div><div class="stat-l">Functions</div></div>
+    <div class="stat"><div class="stat-n">14</div><div class="stat-l">Triggers</div></div>
+    <div class="stat"><div class="stat-n">9</div><div class="stat-l">Procedures</div></div>
+    <div class="stat"><div class="stat-n">1534</div><div class="stat-l">SQL Lines</div></div>
+  </div>
+  <div class="warn">⚠️ <strong>Evaluation Day:</strong> Railway free tier sleeps after 15 min. Before demo → go to <strong>railway.app</strong> → ShopSphere → click <strong>Redeploy</strong>. The frontend works on mock data without it.</div>
+  <p style="margin-top:1.5rem;color:var(--muted);font-size:13px">Team: <strong style="color:var(--white)">Rehan · Mani · Raghav</strong> (Backend) &nbsp;|&nbsp; <strong style="color:var(--white)">Akhil</strong> (Frontend) &nbsp;|&nbsp; <strong style="color:var(--white)">Zayed</strong> (Report)</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 1 — REPOSITORY MAP
+═══════════════════════════════════════════════════ -->
+<div class="section" id="repo">
+<div class="container">
+  <div class="sec-head"><div class="sec-num">1</div><h2>Repository Map</h2></div>
+  <p>Every file in the project with a direct GitHub link. Click any file to open it on GitHub.</p>
+
+  <div class="tree">
+<span class="tree-dir">dbs2/</span> &nbsp;<a href="https://github.com/292akhil2929-cmyk/dbs2" target="_blank" class="gh"><svg width="12" height="12" viewBox="0 0 24 24" fill="#58a6ff"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>Open Repo</a>
+├── <span class="tree-dir">backend/db/</span>
+│   └── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql" target="_blank">schema.sql</a></span> &nbsp;<span class="tree-note">← THE MAIN SQL FILE — 1534 lines, all 20 tables + views + triggers + procedures</span>
+│
+├── <span class="tree-dir">frontend/app/</span>
+│   ├── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/app/page.tsx" target="_blank">page.tsx</a></span> &nbsp;<span class="tree-note">← Root page: cart state, Railway fetch, checkout logic</span>
+│   ├── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/app/layout.tsx" target="_blank">layout.tsx</a></span> &nbsp;<span class="tree-note">← HTML wrapper, font loading</span>
+│   └── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/app/globals.css" target="_blank">globals.css</a></span> &nbsp;<span class="tree-note">← Global styles, Tailwind base</span>
+│
+├── <span class="tree-dir">frontend/components/</span>
+│   ├── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/Navbar.tsx" target="_blank">Navbar.tsx</a></span> &nbsp;<span class="tree-note">← Fixed top nav, cart button, mobile menu</span>
+│   ├── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/HeroSection.tsx" target="_blank">HeroSection.tsx</a></span> &nbsp;<span class="tree-note">← Featured product hero with rating + CTA</span>
+│   ├── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/ProductGrid.tsx" target="_blank">ProductGrid.tsx</a></span> &nbsp;<span class="tree-note">← Category filter pills, sort dropdown, product list</span>
+│   ├── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/ProductCard.tsx" target="_blank">ProductCard.tsx</a></span> &nbsp;<span class="tree-note">← Individual product card with hover + add-to-cart</span>
+│   ├── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/StatsSection.tsx" target="_blank">StatsSection.tsx</a></span> &nbsp;<span class="tree-note">← "50K+ customers, 4.9★" stats strip</span>
+│   ├── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/FeaturesSection.tsx" target="_blank">FeaturesSection.tsx</a></span> &nbsp;<span class="tree-note">← Free shipping / support feature cards</span>
+│   └── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/TestimonialsSection.tsx" target="_blank">TestimonialsSection.tsx</a></span> &nbsp;<span class="tree-note">← Customer review quotes</span>
+│
+├── <span class="tree-dir">frontend/data/</span>
+│   └── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/data/products.ts" target="_blank">products.ts</a></span> &nbsp;<span class="tree-note">← MOCK_PRODUCTS[8] fallback data (used when Railway offline)</span>
+│
+├── <span class="tree-dir">frontend/types/</span>
+│   └── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/types/product.ts" target="_blank">product.ts</a></span> &nbsp;<span class="tree-note">← TypeScript Product + CartItem interfaces (mirrors SQL schema 1:1)</span>
+│
+├── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/next.config.mjs" target="_blank">next.config.mjs</a></span> &nbsp;<span class="tree-note">← output:"export", basePath:"/dbs2" (critical for GitHub Pages)</span>
+└── <span class="tree-file">📄 <a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/.github/workflows/deploy.yml" target="_blank">.github/workflows/deploy.yml</a></span> &nbsp;<span class="tree-note">← CI/CD: npm build → push /out to main → GitHub Pages serves it</span>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 2 — WEBSITE TOUR
+═══════════════════════════════════════════════════ -->
+<div class="section" id="tour">
+<div class="container">
+  <div class="sec-head"><div class="sec-num">2</div><h2>Website Tour — What You See → Where It Lives</h2></div>
+  <p>Each visible part of the live site mapped to its component file and the database tables/queries that power it.</p>
+
+  <h3>🔝 Navbar</h3>
+  <div class="card" style="margin-bottom:1rem">
+    <p style="margin:0;font-size:13px"><strong>What you see:</strong> Fixed top bar with ShopSphere logo, nav links (Shop, Audio, Peripherals, About), Cart button with item count badge. Becomes slightly shadowed when you scroll down.</p>
+    <p style="margin-top:8px;font-size:13px"><strong>File:</strong> <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/Navbar.tsx" target="_blank">components/Navbar.tsx</a> &nbsp;
+    <strong>Key logic:</strong> <code>useEffect</code> on <code>window.scroll</code> → sets <code>scrolled</code> state → adds border/shadow. Cart count = <code>cartItems.reduce((s,i) => s + i.quantity, 0)</code>.<br/>
+    <strong>DB connection:</strong> Cart count comes from React state in <code>page.tsx</code> — mirrors what would be in <code>CART_ITEMS</code> table.</p>
+  </div>
+
+  <h3>🦸 Hero Section</h3>
+  <div class="card" style="margin-bottom:1rem">
+    <p style="margin:0;font-size:13px"><strong>What you see:</strong> Full-width feature of the first/featured product — name, description, star rating, price with strikethrough, discount badge, "Add to Cart" + "Browse all" buttons, and product image card.</p>
+    <p style="margin-top:8px;font-size:13px"><strong>File:</strong> <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/HeroSection.tsx" target="_blank">HeroSection.tsx</a><br/>
+    <strong>Props it receives:</strong> <code>product: Product</code> (from Railway or MOCK_PRODUCTS[0]), <code>onAddToCart</code> callback.<br/>
+    <strong>Discount calc:</strong> <code>Math.round((1 - price/originalPrice) * 100)</code> — maps to <code>ROUND(((compare_price - price)/compare_price)*100)</code> in <code>vw_product_catalog</code>.<br/>
+    <strong>DB tables:</strong> PRODUCTS (name, price, compare_price, description), BRANDS (brand name), PRODUCT_IMAGES (imageUrl), REVIEWS (avg_rating, review_count)</p>
+  </div>
+
+  <h3>🛍️ Product Grid</h3>
+  <div class="card" style="margin-bottom:1rem">
+    <p style="margin:0;font-size:13px"><strong>What you see:</strong> Category filter pills (All, Audio, Peripherals, Displays, Lighting, Accessories), sort dropdown (Featured, Price ↑↓, Rating, Newest), responsive product card grid.</p>
+    <p style="margin-top:8px;font-size:13px"><strong>File:</strong> <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/ProductGrid.tsx" target="_blank">ProductGrid.tsx</a><br/>
+    <strong>Filtering:</strong> <code>products.filter(p => activeCategory === 'all' || p.categorySlug === activeCategory)</code><br/>
+    <strong>Sorting:</strong> Client-side sort on price/rating/createdAt.<br/>
+    <strong>DB equivalent:</strong> <code>sp_search_products(query, category_id, brand_id, min_price, max_price, sort, page, limit)</code></p>
+  </div>
+
+  <h3>🃏 Product Card</h3>
+  <div class="card" style="margin-bottom:1rem">
+    <p style="margin:0;font-size:13px"><strong>What you see:</strong> Product image (zoom on hover), badges (% off, New, Low stock), brand · category, name, star rating, price + original, "Add" button that turns green "Added" for 1.8s.</p>
+    <p style="margin-top:8px;font-size:13px"><strong>File:</strong> <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/ProductCard.tsx" target="_blank">ProductCard.tsx</a><br/>
+    <strong>"Low stock" badge:</strong> <code>product.stock &lt;= 10 && product.stock > 0</code> → mirrors <code>vw_low_stock</code> (WHERE stock_qty &lt;= 10).<br/>
+    <strong>Added state:</strong> <code>useState(false)</code> → set true on click → <code>setTimeout 1800ms</code> → reset.<br/>
+    <strong>DB tables:</strong> PRODUCTS (stock_qty, is_new), PRODUCT_IMAGES, REVIEWS</p>
+  </div>
+
+  <h3>🛒 Cart Drawer</h3>
+  <div class="card" style="margin-bottom:1rem">
+    <p style="margin:0;font-size:13px"><strong>What you see:</strong> Slide-in panel from right with cart items (image, brand, name, price, quantity +/−, remove), free-shipping progress bar (fills toward AED 200), subtotal, shipping, total, "Place Order →" button.</p>
+    <p style="margin-top:8px;font-size:13px"><strong>File:</strong> <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/app/page.tsx" target="_blank">page.tsx lines 187–297</a><br/>
+    <strong>Free shipping:</strong> <code>shippingFee = subtotal >= 200 ? 0 : 15</code><br/>
+    <strong>Progress bar:</strong> <code>width: Math.min((subtotal/200)*100, 100)%</code><br/>
+    <strong>DB connection:</strong> Cart state mirrors CART_ITEMS table. On checkout, POSTs to <code>/api/orders</code> → inserts into ORDERS + ORDER_ITEMS.</p>
+  </div>
+
+  <h3>✅ Checkout Flow</h3>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-title">User clicks "Place Order →"</div><div class="tl-desc">page.tsx <code>handleCheckout()</code> fires</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-title">POST /api/orders</div><div class="tl-desc">Railway receives <code>{ items:[{productId, quantity, price}], total }</code></div></div>
+    <div class="tl-item"><div class="tl-dot" style="background:var(--red)"></div><div class="tl-title">Trigger 1 fires (BEFORE INSERT ORDER_ITEMS)</div><div class="tl-desc">Checks stock — SIGNAL if insufficient → ROLLBACK</div></div>
+    <div class="tl-item"><div class="tl-dot" style="background:var(--green)"></div><div class="tl-title">Trigger 2 fires (AFTER INSERT ORDER_ITEMS)</div><div class="tl-desc">Deducts stock_qty from PRODUCTS</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-title">Trigger 7 fires (AFTER INSERT ORDERS)</div><div class="tl-desc">Increments coupon used_count if coupon applied</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-title">Trigger 13 fires (AFTER UPDATE ORDERS)</div><div class="tl-desc">Inserts row in ORDER_STATUS_HISTORY + customer notification</div></div>
+    <div class="tl-item"><div class="tl-dot" style="background:var(--amber)"></div><div class="tl-title">Frontend shows "Order Placed!" ✓</div><div class="tl-desc">checkoutDone=true, cartItems=[], auto-reset after 4s</div></div>
+  </div>
+
+  <h3>📶 Railway Live / Mock Data Badge</h3>
+  <p>Bottom-right corner of every page. Green = Railway DB responding. Gray = using hardcoded MOCK_PRODUCTS from <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/data/products.ts" target="_blank">data/products.ts</a>. Controlled by <code>liveData</code> state in page.tsx.</p>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 3 — ALL 20 TABLES
+═══════════════════════════════════════════════════ -->
+<div class="section" id="tables">
+<div class="container">
+  <div class="sec-head"><div class="sec-num">3</div><h2>All 20 Tables — With GitHub Links</h2></div>
+  <p>Every table with its GitHub line range in schema.sql, purpose, and key design decisions.</p>
+
+  <div class="grid2">
+    <div class="card c-blue">
+      <div class="card-title">Table 1 — CATEGORIES</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L19-L33" target="_blank">schema.sql L19–L33</a>
+      <p style="margin-top:8px"><strong>Self-referencing FK:</strong> <code>parent_id → category_id</code> same table. NULL = top level. Electronics(1) → Smartphones(6). ON DELETE SET NULL keeps children as top-level if parent deleted.</p>
+      <p><strong>15 categories:</strong> Electronics, Fashion, Home & Kitchen, Books, Sports, + 10 sub-categories</p>
+    </div>
+    <div class="card c-blue">
+      <div class="card-title">Table 2 — USERS</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L38-L52" target="_blank">schema.sql L38–L52</a>
+      <p style="margin-top:8px"><code>email VARCHAR(191)</code> not 255 — utf8mb4 InnoDB index limit is 767 bytes; 191×4=764 fits. Role ENUM enforces 'customer'/'admin'/'vendor' at DB level. password_hash = bcrypt.</p>
+    </div>
+    <div class="card c-green">
+      <div class="card-title">Table 3 — ADDRESSES</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L57-L72" target="_blank">schema.sql L57–L72</a>
+      <p style="margin-top:8px">Extracted from USERS for <strong>2NF</strong>. Address depends on user, not order. One user → many addresses. Default enforced by Trigger 11.</p>
+    </div>
+    <div class="card c-green">
+      <div class="card-title">Table 4 — BRANDS</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L77-L86" target="_blank">schema.sql L77–L86</a>
+      <p style="margin-top:8px">Extracted from PRODUCTS for <strong>BCNF</strong>. Without this: <code>product_id → brand_name → country</code> is transitive. 15 brands: Apple, Samsung, Sony, Nike, Levi's, IKEA, Dell, JBL, Lenovo, DJI…</p>
+    </div>
+    <div class="card c-amber">
+      <div class="card-title">Table 5 — PRODUCTS ⭐</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L91-L123" target="_blank">schema.sql L91–L123</a>
+      <p style="margin-top:8px">Central table. DECIMAL(10,2) for price (not FLOAT). FULLTEXT index on (name, description) for search. avg_rating/review_count cached (maintained by Triggers 4/5/6). CHECK constraints on price≥0, stock≥0, rating 0-5.</p>
+    </div>
+    <div class="card c-amber">
+      <div class="card-title">Table 6 — PRODUCT_IMAGES</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L128-L139" target="_blank">schema.sql L128–L139</a>
+      <p style="margin-top:8px"><strong>1NF fix</strong> — multiple images can't be columns (img1, img2, img3). One row per image. <code>is_primary=1</code> used in JOINs to get main display image.</p>
+    </div>
+    <div class="card c-amber">
+      <div class="card-title">Table 7 — PRODUCT_ATTRIBUTES</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L144-L154" target="_blank">schema.sql L144–L154</a>
+      <p style="margin-top:8px"><strong>EAV pattern</strong> — (product_id, attr_name, attr_value). iPhone → (RAM:8GB, Storage:256GB, OS:iOS17). Different product types need different specs — can't be fixed columns.</p>
+    </div>
+    <div class="card c-purple">
+      <div class="card-title">Table 8 — COUPONS</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L159-L177" target="_blank">schema.sql L159–L177</a>
+      <p style="margin-top:8px">type ENUM('percentage','fixed'). max_discount caps % coupons. used_count auto-incremented by Trigger 7. 7 codes: WELCOME10, SUMMER20, FLASH50, VIP30, STUDENT15, FLAT100, TECH500.</p>
+    </div>
+    <div class="card c-purple">
+      <div class="card-title">Table 9 — ORDERS ⭐</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L182-L206" target="_blank">schema.sql L182–L206</a>
+      <p style="margin-top:8px">Stores subtotal, discount_amt, shipping_fee, tax_amt, total_amount separately for transparent billing. Status ENUM: pending→confirmed→processing→shipped→delivered/cancelled/refunded.</p>
+    </div>
+    <div class="card c-purple">
+      <div class="card-title">Table 10 — ORDER_ITEMS ⭐</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L211-L223" target="_blank">schema.sql L211–L223</a>
+      <p style="margin-top:8px"><strong>unit_price = price snapshot at order time</strong>. Not derived from PRODUCTS.price — that changes. UNIQUE(order_id, product_id) prevents duplicates.</p>
+    </div>
+    <div class="card c-pink">
+      <div class="card-title">Table 11 — PAYMENTS</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L228-L245" target="_blank">schema.sql L228–L245</a>
+      <p style="margin-top:8px">1:1 with ORDERS via UNIQUE on order_id. 7 methods: credit_card, debit_card, paypal, bank_transfer, cash_on_delivery, apple_pay, google_pay. gateway_resp TEXT stores raw JSON.</p>
+    </div>
+    <div class="card c-pink">
+      <div class="card-title">Table 12 — REVIEWS</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L250-L269" target="_blank">schema.sql L250–L269</a>
+      <p style="margin-top:8px">order_id FK ensures only buyers review. UNIQUE(user_id, product_id) = one review per product. rating CHECK 1-5. Triggers 4/5/6 auto-update PRODUCTS.avg_rating on any review change.</p>
+    </div>
+    <div class="card c-blue">
+      <div class="card-title">Table 13 — CART_ITEMS</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L274-L286" target="_blank">schema.sql L274–L286</a>
+      <p style="margin-top:8px">Persistent DB cart (survives browser close). UNIQUE(user_id, product_id). Cleared by sp_place_order after checkout.</p>
+    </div>
+    <div class="card c-blue">
+      <div class="card-title">Table 14 — WISHLISTS</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L291-L301" target="_blank">schema.sql L291–L301</a>
+      <p style="margin-top:8px">Saved items. Trigger 14 queries this table when a product is restocked (stock 0→>0) to send notifications to all wishlist users.</p>
+    </div>
+    <div class="card c-red">
+      <div class="card-title">Table 15 — AUDIT_LOG</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L306-L320" target="_blank">schema.sql L306–L320</a>
+      <p style="margin-top:8px"><strong>No FKs intentionally</strong> — immutable log must survive record deletion. JSON columns for old_value/new_value. Written only by triggers, never by app.</p>
+    </div>
+    <div class="card c-red">
+      <div class="card-title">Table 16 — NOTIFICATIONS</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L325-L342" target="_blank">schema.sql L325–L342</a>
+      <p style="margin-top:8px">Written by Triggers 13 (order status) + 14 (restock) and sp_broadcast_promo. Composite index (user_id, is_read) optimises unread count queries.</p>
+    </div>
+    <div class="card c-green">
+      <div class="card-title">Table 17 — SHIPPING_ZONES</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L347-L360" target="_blank">schema.sql L347–L360</a>
+      <p style="margin-top:8px">Per-emirate rates. 7 UAE zones. Used by fn_zone_shipping_fee. Dubai: AED 10 std, AED 25 express, free >500. Fujairah: AED 25/45, free >1000.</p>
+    </div>
+    <div class="card c-green">
+      <div class="card-title">Table 18 — TAGS</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L365-L373" target="_blank">schema.sql L365–L373</a>
+      <p style="margin-top:8px">Bestseller(amber), New Arrival(green), Limited(red), Eco Friendly(green), Staff Pick(blue), Clearance(gray), Bundle Deal(purple). color_hex for UI badges.</p>
+    </div>
+    <div class="card c-amber">
+      <div class="card-title">Table 19 — PRODUCT_TAGS</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L378-L388" target="_blank">schema.sql L378–L388</a>
+      <p style="margin-top:8px"><strong>1NF fix</strong> for M:N. Junction table resolves Products ↔ Tags. Composite PK (product_id, tag_id). Without this: tags="Bestseller,Staff Pick" in one column = 1NF violation.</p>
+    </div>
+    <div class="card c-amber">
+      <div class="card-title">Table 20 — ORDER_STATUS_HISTORY</div>
+      <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L393-L406" target="_blank">schema.sql L393–L406</a>
+      <p style="margin-top:8px">Full audit of every status transition. Written by Trigger 13 automatically. Order 1: pending→confirmed→processing→shipped→delivered with comments at each step.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 4 — NORMALIZATION
+═══════════════════════════════════════════════════ -->
+<div class="section" id="norm">
+<div class="container">
+  <div class="sec-head"><div class="sec-num">4</div><h2>Normalization — 1NF → BCNF</h2></div>
+
+  <h3>Functional Dependencies — Explicit Notation</h3>
+  <div class="fd">
+<span class="fc">-- USERS</span>
+<span class="fk">user_id</span> <span class="fa">→</span> <span class="fv">{email, password_hash, full_name, phone, role, is_active, last_login, created_at}</span>
+<span class="fk">email</span>   <span class="fa">→</span> <span class="fv">{user_id}</span>  <span class="fc">← email is candidate key (UNIQUE constraint)</span>
+
+<span class="fc">-- CATEGORIES</span>
+<span class="fk">category_id</span> <span class="fa">→</span> <span class="fv">{name, parent_id, description, icon_url, is_active}</span>
+<span class="fk">name</span>        <span class="fa">→</span> <span class="fv">{category_id}</span>  <span class="fc">← candidate key (UNIQUE)</span>
+
+<span class="fc">-- BRANDS</span>
+<span class="fk">brand_id</span> <span class="fa">→</span> <span class="fv">{name, country, website, logo_url}</span>
+<span class="fk">name</span>     <span class="fa">→</span> <span class="fv">{brand_id}</span>  <span class="fc">← candidate key (UNIQUE)</span>
+
+<span class="fc">-- PRODUCTS</span>
+<span class="fk">product_id</span> <span class="fa">→</span> <span class="fv">{category_id, brand_id, name, slug, description, price, compare_price, stock_qty, sku, weight_kg, avg_rating, review_count, is_active, is_featured}</span>
+<span class="fk">slug</span>       <span class="fa">→</span> <span class="fv">{product_id}</span>  <span class="fc">← candidate key (UNIQUE)</span>
+<span class="fk">sku</span>        <span class="fa">→</span> <span class="fv">{product_id}</span>  <span class="fc">← candidate key (UNIQUE)</span>
+
+<span class="fc">-- ORDERS</span>
+<span class="fk">order_id</span> <span class="fa">→</span> <span class="fv">{user_id, address_id, coupon_id, subtotal, discount_amt, shipping_fee, tax_amt, total_amount, status, ordered_at}</span>
+
+<span class="fc">-- ORDER_ITEMS (composite PK)</span>
+<span class="fk">(order_id, product_id)</span> <span class="fa">→</span> <span class="fv">{quantity, unit_price}</span>
+<span class="fc">unit_price is NOT derived from product_id — it is the PRICE AT ORDER TIME (price snapshot)</span>
+
+<span class="fc">-- COUPONS</span>
+<span class="fk">coupon_id</span> <span class="fa">→</span> <span class="fv">{code, type, discount_value, min_order_amt, max_discount, expires_at, max_uses, used_count}</span>
+<span class="fk">code</span>      <span class="fa">→</span> <span class="fv">{coupon_id}</span>  <span class="fc">← candidate key (UNIQUE)</span>
+
+<span class="fc">-- PRODUCT_ATTRIBUTES (composite PK)</span>
+<span class="fk">(product_id, attr_name)</span> <span class="fa">→</span> <span class="fv">{attr_value}</span>
+  </div>
+
+  <div class="grid2" style="margin-top:1.5rem">
+    <div class="card c-green">
+      <div class="card-title">✅ First Normal Form (1NF)</div>
+      <p><strong>Rule:</strong> All attributes atomic, no repeating groups.</p>
+      <p><strong>Violations fixed:</strong></p>
+      <ul style="font-size:13px">
+        <li>Multiple images → <strong>PRODUCT_IMAGES</strong> table</li>
+        <li>Multiple tags → <strong>PRODUCT_TAGS</strong> junction</li>
+        <li>Variable specs → <strong>PRODUCT_ATTRIBUTES</strong> EAV</li>
+        <li>Multiple addresses → <strong>ADDRESSES</strong> table</li>
+      </ul>
+    </div>
+    <div class="card c-blue">
+      <div class="card-title">✅ Second Normal Form (2NF)</div>
+      <p><strong>Rule:</strong> In 1NF + no partial dependencies on composite keys.</p>
+      <p><strong>Violation fixed:</strong> If street/city were in ORDERS: <code>order_id, product_id → street</code> — street depends on order, not product → partial dep. Fix: ADDRESSES table.</p>
+      <p><code>(order_id, product_id) → quantity</code> ✓ fully depends on both</p>
+    </div>
+    <div class="card c-amber">
+      <div class="card-title">✅ Third Normal Form (3NF)</div>
+      <p><strong>Rule:</strong> In 2NF + no transitive dependencies.</p>
+      <p><strong>Violation fixed:</strong> <code>product_id → brand_name → brand_country</code> — brand_country depends on brand_name (non-key), not product_id directly. Fix: BRANDS table extracted.</p>
+      <p>Same issue with category_description → CATEGORIES extracted.</p>
+    </div>
+    <div class="card c-purple">
+      <div class="card-title">✅ BCNF</div>
+      <p><strong>Rule:</strong> For every FD X→Y, X must be a superkey.</p>
+      <p><strong>In PRODUCTS:</strong> determinants are product_id, slug, sku — all superkeys ✓</p>
+      <p>Without BRANDS: <code>brand_name → country</code> and brand_name is NOT a superkey of PRODUCTS → BCNF violation.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 5 — VIEWS
+═══════════════════════════════════════════════════ -->
+<div class="section" id="views">
+<div class="container">
+  <div class="sec-head"><div class="sec-num">5</div><h2>Views (7)</h2></div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-view">VIEW 1</span><span class="obj-name">vw_product_catalog</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L415-L441" target="_blank">L415–L441</a></div>
+    <div class="obj-desc">Complete product listing with brand, parent category, discount %, and primary image. Used by product grid API. 4-table JOIN stored as a view.</div>
+    <pre>SELECT p.*, ROUND(((compare_price-price)/compare_price)*100) AS discount_pct,
+  c.name AS category_name,
+  pc.name AS parent_category,     -- self-join: c=Smartphones, pc=Electronics
+  b.name AS brand_name,
+  pi.url AS primary_image
+FROM PRODUCTS p
+JOIN  CATEGORIES c  ON p.category_id = c.category_id
+LEFT JOIN CATEGORIES pc ON c.parent_id = pc.category_id   -- parent category
+LEFT JOIN BRANDS b  ON p.brand_id = b.brand_id             -- NULL for books
+LEFT JOIN PRODUCT_IMAGES pi ON pi.product_id=p.product_id AND pi.is_primary=1</pre>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-view">VIEW 2</span><span class="obj-name">vw_order_summary</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L444-L471" target="_blank">L444–L471</a></div>
+    <div class="obj-desc">Admin order dashboard — customer name, delivery address (CONCAT), item count (COUNT), payment status. GROUP BY order_id because of COUNT aggregate.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-view">VIEW 3</span><span class="obj-name">vw_revenue_by_category</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L474-L488" target="_blank">L474–L488</a></div>
+    <div class="obj-desc">Revenue by category. Uses SUM(oi.quantity * oi.unit_price) with stored price snapshot — historically accurate. Excludes cancelled/refunded orders.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-view">VIEW 4</span><span class="obj-name">vw_low_stock</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L491-L504" target="_blank">L491–L504</a></div>
+    <div class="obj-desc">Products with stock_qty ≤ 10 AND is_active=1, sorted by stock ASC. Mirrors the "Low stock" badge on ProductCard.tsx. Used by sp_dashboard_stats.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-view">VIEW 5</span><span class="obj-name">vw_customer_ltv</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L507-L523" target="_blank">L507–L523</a></div>
+    <div class="obj-desc">Customer Lifetime Value. LEFT JOIN ORDERS includes customers with 0 orders. COALESCE handles NULL from empty LEFT JOIN. Only counts delivered (not cancelled/refunded) orders.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-view">VIEW 6</span><span class="obj-name">vw_product_tags</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L1317-L1328" target="_blank">L1317–L1328</a></div>
+    <div class="obj-desc">Products with all their tags as one string. Uses GROUP_CONCAT(t.name ORDER BY t.name SEPARATOR ', '). iPhone → "Bestseller, Staff Pick". Presentational only — data stays normalised in PRODUCT_TAGS.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-view">VIEW 7</span><span class="obj-name">vw_unread_notifications</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L1331-L1342" target="_blank">L1331–L1342</a></div>
+    <div class="obj-desc">Unread notification count per user. SUM(CASE WHEN is_read=0 THEN 1 ELSE 0 END) — counts only unread rows. LEFT JOIN keeps users with zero notifications.</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 6 — FUNCTIONS
+═══════════════════════════════════════════════════ -->
+<div class="section" id="funcs">
+<div class="container">
+  <div class="sec-head"><div class="sec-num">6</div><h2>Stored Functions (7)</h2></div>
+  <p>Return a single value, callable in SELECT/WHERE. Either DETERMINISTIC or READS SQL DATA.</p>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-func">FUNCTION 1</span><span class="obj-name">fn_apply_coupon</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L532-L552" target="_blank">L532–L552</a></div>
+    <div class="obj-desc">Calculates discount amount from a coupon. Handles percentage (with cap) and fixed types. Prevents discounting more than cart total.</div>
+    <pre>IF type = 'percentage' THEN
+  disc = ROUND(subtotal * val / 100, 2)
+  IF max_discount IS NOT NULL AND disc > max_discount THEN disc = max_discount
+ELSE disc = val  -- fixed amount
+IF disc > subtotal THEN disc = subtotal  -- can't exceed cart value
+RETURN disc
+
+-- Example: fn_apply_coupon(2000,'percentage',50,800) → min(1000,800) = 800</pre>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-func">FUNCTION 2</span><span class="obj-name">fn_discounted_price</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L555-L566" target="_blank">L555–L566</a></div>
+    <div class="obj-desc">Generic % discount. ROUND(price*(1-pct/100),2). Handles NULLs, pct≤0 (return original), pct≥100 (return 0).</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-func">FUNCTION 3</span><span class="obj-name">fn_cart_subtotal</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L569-L579" target="_blank">L569–L579</a></div>
+    <div class="obj-desc">SUM(quantity × price) across CART_ITEMS JOIN PRODUCTS for a user. COALESCE(…,0) returns 0 for empty cart. Called by sp_place_order.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-func">FUNCTION 4</span><span class="obj-name">fn_validate_coupon</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L583-L602" target="_blank">L583–L602</a></div>
+    <div class="obj-desc">All-in-one coupon check: exists + is_active=1 + not expired + under max_uses + subtotal≥min_order_amt. Returns discount amount or 0.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-func">FUNCTION 5</span><span class="obj-name">fn_customer_order_count</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L605-L613" target="_blank">L605–L613</a></div>
+    <div class="obj-desc">COUNT(*) of non-cancelled/refunded orders for a user. Used for loyalty tier logic.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-func">FUNCTION 6</span><span class="obj-name">fn_shipping_fee</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L616-L628" target="_blank">L616–L628</a></div>
+    <div class="obj-desc">Weight-based shipping: ≤1kg→AED10, ≤5kg→AED20, ≤10kg→AED35, >10kg→AED50. Called by sp_place_order (×2 for Express).</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-func">FUNCTION 7a</span><span class="obj-name">fn_zone_shipping_fee</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L1351-L1365" target="_blank">L1351–L1365</a><span class="badge b-func">FUNCTION 7b</span><span class="obj-name">fn_price_with_vat</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L1368-L1374" target="_blank">L1368–L1374</a></div>
+    <div class="obj-desc">fn_zone_shipping_fee(emirate, is_express): looks up SHIPPING_ZONES, COALESCE fallback to 10/25. &nbsp;&nbsp; fn_price_with_vat(price): ROUND(price*1.05,2) — UAE 5% VAT.</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 7 — TRIGGERS
+═══════════════════════════════════════════════════ -->
+<div class="section" id="triggers">
+<div class="container">
+  <div class="sec-head"><div class="sec-num">7</div><h2>Triggers (14)</h2></div>
+  <p>Auto-execute on INSERT/UPDATE/DELETE. Enforce rules at DB level — no app can bypass them.</p>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-trig">TRIGGER 1</span><span class="badge b-before">BEFORE INSERT</span><span class="obj-name">trg_check_stock_before_order</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L639-L651" target="_blank">L639–L651</a></div>
+    <div class="obj-desc">On ORDER_ITEMS. Reads stock — if insufficient: <code>SIGNAL SQLSTATE '45000'</code> → aborts + ROLLBACK. BEFORE so we can stop the insert cleanly.</div>
+    <pre>SELECT stock_qty INTO v_stock FROM PRODUCTS WHERE product_id = NEW.product_id;
+IF v_stock &lt; NEW.quantity THEN
+  SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insufficient stock';
+END IF</pre>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-trig">TRIGGER 2</span><span class="badge b-after">AFTER INSERT</span><span class="obj-name">trg_deduct_stock_after_order</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L654-L659" target="_blank">L654–L659</a></div>
+    <div class="obj-desc">On ORDER_ITEMS. Deducts stock: <code>UPDATE PRODUCTS SET stock_qty = stock_qty - NEW.quantity</code>. AFTER — Trigger 1 already confirmed stock is sufficient.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-trig">TRIGGER 3</span><span class="badge b-after">AFTER UPDATE</span><span class="obj-name">trg_restore_stock_on_cancel</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L663-L679" target="_blank">L663–L679</a></div>
+    <div class="obj-desc">On ORDERS. Guard: NEW.status='cancelled' AND OLD.status NOT IN ('cancelled','refunded') — prevents double-restore. Multi-table UPDATE JOIN restores all products in one statement. Also writes AUDIT_LOG.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-trig">TRIGGERS 4/5/6</span><span class="badge b-after">AFTER INSERT/UPDATE/DELETE</span><span class="obj-name">trg_update_rating_on_*</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L682-L711" target="_blank">L682–L711</a></div>
+    <div class="obj-desc">On REVIEWS. Auto-maintain PRODUCTS.avg_rating and review_count. Trigger 6 uses COALESCE(AVG,0) for when last review deleted (AVG of empty = NULL).</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-trig">TRIGGER 7</span><span class="badge b-after">AFTER INSERT</span><span class="obj-name">trg_increment_coupon_usage</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L714-L721" target="_blank">L714–L721</a></div>
+    <div class="obj-desc">On ORDERS. IF NEW.coupon_id IS NOT NULL: increments COUPONS.used_count. Enforces max_uses limit over time.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-trig">TRIGGER 8</span><span class="badge b-before">BEFORE INSERT</span><span class="obj-name">trg_auto_slug_on_insert</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L724-L731" target="_blank">L724–L731</a></div>
+    <div class="obj-desc">On PRODUCTS. IF slug is empty: LOWER(REPLACE(name,' ','-')). BEFORE trigger can modify NEW.slug. "iPhone 15 Pro" → "iphone-15-pro".</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-trig">TRIGGERS 9/10</span><span class="badge b-after">AFTER INSERT/UPDATE</span><span class="obj-name">trg_audit_product_insert / update</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L734-L755" target="_blank">L734–L755</a></div>
+    <div class="obj-desc">On PRODUCTS. Write JSON old/new values to AUDIT_LOG. Trigger 10 only fires IF OLD.price != NEW.price OR OLD.stock_qty != NEW.stock_qty — avoids noise.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-trig">TRIGGER 11</span><span class="badge b-before">BEFORE INSERT</span><span class="obj-name">trg_single_default_address</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L758-L770" target="_blank">L758–L770</a></div>
+    <div class="obj-desc">On ADDRESSES. If new row is is_default=1 and user already has a default: silently sets NEW.is_default=0. Can't UPDATE existing row in BEFORE trigger (MySQL restriction).</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-trig">TRIGGER 12</span><span class="badge b-after">AFTER INSERT</span><span class="obj-name">trg_audit_user_register</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L773-L779" target="_blank">L773–L779</a></div>
+    <div class="obj-desc">On USERS. Logs every new registration to AUDIT_LOG with JSON_OBJECT('email', email, 'role', role).</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-trig">TRIGGER 13</span><span class="badge b-after">AFTER UPDATE</span><span class="obj-name">trg_order_status_history</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L1384-L1398" target="_blank">L1384–L1398</a></div>
+    <div class="obj-desc">On ORDERS. Guard OLD.status &lt;&gt; NEW.status. Inserts into ORDER_STATUS_HISTORY AND sends customer notification — two INSERTs, one trigger, one transaction.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-trig">TRIGGER 14</span><span class="badge b-after">AFTER UPDATE</span><span class="obj-name">trg_notify_restock</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L1401-L1414" target="_blank">L1401–L1414</a></div>
+    <div class="obj-desc">On PRODUCTS. Guard OLD.stock_qty=0 AND NEW.stock_qty>0. INSERT...SELECT from WISHLISTS — sends notification to every user who wishlisted the product in one set-based operation.</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 8 — STORED PROCEDURES
+═══════════════════════════════════════════════════ -->
+<div class="section" id="procs">
+<div class="container">
+  <div class="sec-head"><div class="sec-num">8</div><h2>Stored Procedures (9)</h2></div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-proc">PROCEDURE 1 ⭐</span><span class="obj-name">sp_place_order</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L791-L916" target="_blank">L791–L916</a></div>
+    <div class="obj-desc">Full checkout in one transaction. Most complex object in the schema — 125 lines.</div>
+    <pre>sp_place_order(user_id, address_id, coupon_code, pay_method, ship_method,
+               OUT order_id, OUT message)
+
+1.  Validate cart NOT empty
+2.  Validate address belongs to user (security)
+3.  Resolve coupon (check active+expiry+max_uses)
+4.  fn_cart_subtotal() → subtotal
+5.  Validate coupon min_order_amt
+6.  fn_apply_coupon() → discount
+7.  SUM(qty × weight_kg) → total weight
+8.  fn_shipping_fee(weight) → shipping (×2 for Express)
+9.  (subtotal - discount) × 0.05 → VAT
+10. subtotal - discount + shipping + vat → total
+
+START TRANSACTION
+  INSERT INTO ORDERS
+  CURSOR LOOP → INSERT ORDER_ITEMS (Triggers 1+2 fire per row)
+  INSERT INTO PAYMENTS
+  DELETE FROM CART_ITEMS (clear cart)
+COMMIT
+
+EXIT HANDLER FOR SQLEXCEPTION: ROLLBACK + order_id=-1 + RESIGNAL</pre>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-proc">PROCEDURE 2</span><span class="obj-name">sp_dashboard_stats</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L919-L933" target="_blank">L919–L933</a></div>
+    <div class="obj-desc">10 KPI metrics in one SELECT row: total_customers, total_orders, total_revenue, active_products, pending_orders, low_stock_count, total_reviews, avg_order_value, items_in_carts, revenue_last_30d.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-proc">PROCEDURE 3</span><span class="obj-name">sp_top_selling_products(limit)</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L936-L957" target="_blank">L936–L957</a></div>
+    <div class="obj-desc">Top N by units_sold with revenue, brand, category. Excludes cancelled/refunded. CALL sp_top_selling_products(10).</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-proc">PROCEDURE 4</span><span class="obj-name">sp_user_order_history(user_id)</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L960-L990" target="_blank">L960–L990</a></div>
+    <div class="obj-desc">Full order history — 7-table JOIN returning every column for a customer order page.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-proc">PROCEDURE 5</span><span class="obj-name">sp_restock_product</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L993-L1010" target="_blank">L993–L1010</a></div>
+    <div class="obj-desc">Admin restock: reads old stock → UPDATE → AUDIT_LOG → return result. Note: if stock goes 0→>0, Trigger 14 fires automatically → notifies wishlist users.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-proc">PROCEDURE 6</span><span class="obj-name">sp_monthly_revenue(year)</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L1013-L1026" target="_blank">L1013–L1026</a></div>
+    <div class="obj-desc">Monthly revenue chart data. GROUP BY MONTH(ordered_at). CALL sp_monthly_revenue(2026).</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-proc">PROCEDURE 7</span><span class="obj-name">sp_search_products</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L1029-L1075" target="_blank">L1029–L1075</a></div>
+    <div class="obj-desc">Full-text + filtered search with pagination. Builds SQL dynamically via CONCAT. Uses MATCH(name,description) AGAINST(q IN BOOLEAN MODE). PREPARE/EXECUTE/DEALLOCATE for dynamic queries.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head"><span class="badge b-proc">PROCEDURE 8</span><span class="obj-name">sp_broadcast_promo</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L1425-L1435" target="_blank">L1425–L1435</a><span class="badge b-proc">PROCEDURE 9</span><span class="obj-name">sp_order_timeline</span><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L1438-L1451" target="_blank">L1438–L1451</a></div>
+    <div class="obj-desc">sp_broadcast_promo: INSERT...SELECT to all active customers, returns ROW_COUNT(). &nbsp;&nbsp; sp_order_timeline: full status history for an order, COALESCE(full_name,'System') for trigger-initiated changes.</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 9 — COMPLEX QUERIES
+═══════════════════════════════════════════════════ -->
+<div class="section" id="queries">
+<div class="container">
+  <div class="sec-head"><div class="sec-num">9</div><h2>Complex Queries</h2></div>
+  <p>All live in <a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/backend/db/schema.sql#L1276-L1311" target="_blank">schema.sql L1276–L1534</a> as commented reference queries.</p>
+
+  <h3>Q1 — Correlated Subquery</h3>
+  <pre>-- Products priced above their category average
+SELECT p.name, p.price, c.name AS category,
+  (SELECT ROUND(AVG(p2.price),2) FROM PRODUCTS p2 WHERE p2.category_id=p.category_id) AS cat_avg
+FROM PRODUCTS p JOIN CATEGORIES c ON p.category_id=c.category_id
+WHERE p.price > (
+  SELECT AVG(p3.price) FROM PRODUCTS p3 WHERE p3.category_id = p.category_id  -- correlated!
+)</pre>
+  <p style="font-size:13px">The inner SELECT re-runs for <em>each outer row</em> using that row's category_id. In Smartphones (avg ~AED 4166): iPhone 15 Pro (4999) ✓, Samsung S24 Ultra (4499) ✓, OnePlus 12 (2999) ✗.</p>
+
+  <h3>Q2 — Nested Subquery (3 levels)</h3>
+  <pre>SELECT u.full_name, SUM(o.total_amount) AS total_spent
+FROM USERS u JOIN ORDERS o ON u.user_id=o.user_id WHERE o.status='delivered'
+GROUP BY u.user_id
+HAVING SUM(o.total_amount) > (
+  SELECT AVG(s.tot) FROM (
+    SELECT SUM(total_amount) AS tot FROM ORDERS WHERE status='delivered' GROUP BY user_id
+  ) s
+)</pre>
+
+  <h3>Q3 — Window Function RANK()</h3>
+  <pre>SELECT product_name, category_name, revenue,
+  RANK() OVER (PARTITION BY category_name ORDER BY revenue DESC) AS cat_rank
+FROM vw_revenue_by_category
+-- RANK() ties get same number, skips next (1,1,3). DENSE_RANK() → 1,1,2. ROW_NUMBER() → 1,2,3</pre>
+
+  <h3>Q4 — EXISTS / NOT EXISTS</h3>
+  <pre>-- Buyers who never wrote a review (target for review-request emails)
+SELECT u.user_id, u.full_name FROM USERS u
+WHERE EXISTS     (SELECT 1 FROM ORDERS  o WHERE o.user_id=u.user_id)
+  AND NOT EXISTS (SELECT 1 FROM REVIEWS r WHERE r.user_id=u.user_id)
+-- EXISTS stops on first match (short-circuit). SELECT 1 — column doesn't matter.</pre>
+
+  <h3>Q5 — 5-Table JOIN</h3>
+  <pre>SELECT o.order_id, u.full_name, b.name AS brand, p.name AS product,
+  oi.quantity, oi.unit_price, (oi.quantity*oi.unit_price) AS line_total
+FROM ORDERS o JOIN USERS u ON o.user_id=u.user_id
+JOIN ORDER_ITEMS oi ON o.order_id=oi.order_id
+JOIN PRODUCTS p ON oi.product_id=p.product_id
+LEFT JOIN BRANDS b ON p.brand_id=b.brand_id  -- LEFT: books have no brand</pre>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 10 — FRONTEND
+═══════════════════════════════════════════════════ -->
+<div class="section" id="frontend">
+<div class="container">
+  <div class="sec-head"><div class="sec-num">10</div><h2>Frontend Architecture</h2></div>
+
+  <div class="grid3">
+    <div class="card c-blue"><div class="card-title">next.config.mjs</div><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/next.config.mjs" target="_blank">next.config.mjs</a><p style="margin-top:8px;font-size:12.5px"><code>output:"export"</code> — static HTML/CSS/JS, no server. <code>basePath:"/dbs2"</code> — repo name prefix (critical or links 404). <code>images:{unoptimized:true}</code> — no Next.js server for optimization.</p></div>
+    <div class="card c-green"><div class="card-title">types/product.ts</div><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/types/product.ts" target="_blank">types/product.ts</a><p style="margin-top:8px;font-size:12.5px">TypeScript interface mirrors SQL schema 1:1. Comments show the DB column: <code>id // PRODUCTS.product_id</code>, <code>rating // avg of REVIEWS.rating</code>.</p></div>
+    <div class="card c-amber"><div class="card-title">data/products.ts</div><a class="gh" href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/data/products.ts" target="_blank">data/products.ts</a><p style="margin-top:8px;font-size:12.5px">8 hardcoded products — Unsplash images. Used when Railway is offline. Frontend always works. FEATURED_PRODUCT shown in HeroSection.</p></div>
+  </div>
+
+  <h3>State Management in page.tsx</h3>
+  <pre>// page.tsx — all cart/product state lives here
+const [products, setProducts] = useState(MOCK_PRODUCTS);  // Railway or mock
+const [liveData, setLiveData] = useState(false);          // badge: Live/Offline
+const [cartItems, setCartItems] = useState([]);            // cart contents
+const [cartOpen, setCartOpen]   = useState(false);         // drawer visibility
+const [checkoutDone, setCheckoutDone] = useState(false);   // success screen
+
+// Railway fetch with silent fallback
+useEffect(() => {
+  fetch(`${RAILWAY_URL}/api/products`)
+    .then(r => r.json())
+    .then(data => { setProducts(mapped); setLiveData(true); })
+    .catch(() => {});  // keep MOCK_PRODUCTS silently
+}, []);
+
+// addToCart — functional update to avoid stale closures
+const addToCart = useCallback((product) => {
+  setCartItems(prev => {
+    const existing = prev.find(i => i.product.id === product.id);
+    if (existing) return prev.map(i => i.product.id === product.id
+      ? { ...i, quantity: i.quantity + 1 } : i);
+    return [...prev, { product, quantity: 1 }];
+  });
+  showToast(`${product.name} added to cart`);
+}, [showToast]);</pre>
+
+  <h3>TypeScript → SQL Column Mapping</h3>
+  <div class="tw"><table>
+    <tr><th>TypeScript (product.ts)</th><th>SQL Column</th><th>Table</th></tr>
+    <tr><td><code>id</code></td><td><code>product_id</code></td><td>PRODUCTS</td></tr>
+    <tr><td><code>price</code></td><td><code>price</code> DECIMAL(10,2)</td><td>PRODUCTS</td></tr>
+    <tr><td><code>originalPrice</code></td><td><code>compare_price</code></td><td>PRODUCTS</td></tr>
+    <tr><td><code>category</code></td><td><code>name</code> (joined)</td><td>CATEGORIES</td></tr>
+    <tr><td><code>brand</code></td><td><code>name</code> (joined)</td><td>BRANDS</td></tr>
+    <tr><td><code>imageUrl</code></td><td><code>url</code> (is_primary=1)</td><td>PRODUCT_IMAGES</td></tr>
+    <tr><td><code>rating</code></td><td><code>avg_rating</code></td><td>PRODUCTS (maintained by triggers)</td></tr>
+    <tr><td><code>stock</code></td><td><code>stock_qty</code></td><td>PRODUCTS</td></tr>
+    <tr><td><code>tags[]</code></td><td>via PRODUCT_TAGS JOIN TAGS</td><td>PRODUCT_TAGS + TAGS</td></tr>
+  </table></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 11 — FEATURE → CODE → DB MAP
+═══════════════════════════════════════════════════ -->
+<div class="section" id="map">
+<div class="container">
+  <div class="sec-head"><div class="sec-num">11</div><h2>Feature → Code → Database Cross-Reference</h2></div>
+
+  <div class="tw"><table>
+    <tr><th>User Action / Feature</th><th>Frontend File : Line</th><th>DB Tables / Objects</th></tr>
+    <tr><td>Page loads, products appear</td><td><a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/app/page.tsx" target="_blank">page.tsx</a> useEffect fetch</td><td>PRODUCTS + vw_product_catalog</td></tr>
+    <tr><td>Hero shows featured product</td><td><a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/HeroSection.tsx" target="_blank">HeroSection.tsx</a></td><td>PRODUCTS.is_featured=1, BRANDS, PRODUCT_IMAGES, REVIEWS (avg_rating)</td></tr>
+    <tr><td>Category filter pill clicked</td><td><a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/ProductGrid.tsx" target="_blank">ProductGrid.tsx</a></td><td>CATEGORIES — client-side filter; DB equiv: sp_search_products(category_id)</td></tr>
+    <tr><td>"Low stock" badge on card</td><td><a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/ProductCard.tsx" target="_blank">ProductCard.tsx:46</a></td><td>PRODUCTS.stock_qty ≤ 10 → mirrors vw_low_stock</td></tr>
+    <tr><td>Add to Cart button</td><td><a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/ProductCard.tsx" target="_blank">ProductCard.tsx:78</a></td><td>CART_ITEMS table (DB) / React state (frontend)</td></tr>
+    <tr><td>Cart item count badge</td><td><a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/components/Navbar.tsx" target="_blank">Navbar.tsx:22</a></td><td>Derived from cartItems state → mirrors COUNT(CART_ITEMS) WHERE user_id</td></tr>
+    <tr><td>Free shipping progress bar</td><td><a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/app/page.tsx" target="_blank">page.tsx:85</a></td><td>SHIPPING_ZONES.free_above (AED 200 threshold)</td></tr>
+    <tr><td>Place Order button</td><td><a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/app/page.tsx" target="_blank">page.tsx:87</a> handleCheckout</td><td>POST /api/orders → ORDERS + ORDER_ITEMS + PAYMENTS + triggers 1,2,7,9,10,13</td></tr>
+    <tr><td>Stock deducted on order</td><td>API INSERT ORDER_ITEMS</td><td>Trigger 2: trg_deduct_stock_after_order</td></tr>
+    <tr><td>Stock check before order</td><td>API INSERT ORDER_ITEMS</td><td>Trigger 1: SIGNAL SQLSTATE '45000' if insufficient</td></tr>
+    <tr><td>Order cancelled → stock back</td><td>Admin UPDATE ORDERS status</td><td>Trigger 3: trg_restore_stock_on_cancel</td></tr>
+    <tr><td>Review submitted → star update</td><td>API INSERT REVIEWS</td><td>Triggers 4/5/6: recalculate avg_rating in PRODUCTS</td></tr>
+    <tr><td>Coupon applied at checkout</td><td>sp_place_order step 3+6</td><td>fn_validate_coupon → fn_apply_coupon → Trigger 7 increments used_count</td></tr>
+    <tr><td>Restock product (admin)</td><td>sp_restock_product</td><td>UPDATE PRODUCTS → Trigger 14 → INSERT NOTIFICATIONS for wishlist users</td></tr>
+    <tr><td>"Live · Railway DB" badge</td><td><a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/app/page.tsx" target="_blank">page.tsx:179</a></td><td>liveData state — true if /api/products fetch succeeded</td></tr>
+    <tr><td>Toast notification</td><td><a href="https://github.com/292akhil2929-cmyk/dbs2/blob/main/frontend/app/page.tsx" target="_blank">page.tsx:57</a> showToast</td><td>Frontend only — mirrors NOTIFICATIONS table concept</td></tr>
+    <tr><td>Order status history</td><td>sp_order_timeline</td><td>ORDER_STATUS_HISTORY + Trigger 13 auto-writes transitions</td></tr>
+    <tr><td>Revenue report</td><td>sp_monthly_revenue(year)</td><td>ORDERS grouped by MONTH(ordered_at)</td></tr>
+    <tr><td>Admin dashboard KPIs</td><td>sp_dashboard_stats()</td><td>10 subqueries across all major tables</td></tr>
+  </table></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION 12 — CHEAT SHEET
+═══════════════════════════════════════════════════ -->
+<div class="section" id="cheat">
+<div class="container">
+  <div class="sec-head"><div class="sec-num">12</div><h2>Cheat Sheet — Professor Q&amp;A</h2></div>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:1.5rem">Click any question to expand the answer.</p>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">How many tables and what's the structure?</div><div class="qa-a">20 tables total. Core: USERS, PRODUCTS, ORDERS, ORDER_ITEMS, PAYMENTS. Supporting normalization: CATEGORIES (self-ref hierarchy), BRANDS (BCNF — extracted transitive dep), ADDRESSES (2NF — extracted from USERS). 1NF tables: PRODUCT_IMAGES, PRODUCT_ATTRIBUTES (EAV), PRODUCT_TAGS (M:N junction). Operational: CART_ITEMS, WISHLISTS, REVIEWS, COUPONS. System: AUDIT_LOG, NOTIFICATIONS, ORDER_STATUS_HISTORY, SHIPPING_ZONES, TAGS.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">Why is BRANDS a separate table?</div><div class="qa-a">To achieve BCNF. Without it: product_id → brand_name → brand_country is a transitive dependency (brand_country depends on brand_name which is not a superkey of PRODUCTS). With BRANDS: brand_id → {name, country, website} and product_id → brand_id only. Every FD determinant is now a superkey.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">Why does ORDER_ITEMS store unit_price?</div><div class="qa-a">Price snapshot. Product prices change over time. If we derived price from PRODUCTS.price, order history would show wrong amounts after price updates. Storing unit_price at order time preserves what the customer actually paid. Also removes the transitive dependency item_id → product_id → current_price which would violate 3NF.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">What happens if stock runs out mid-order?</div><div class="qa-a">Trigger 1 (trg_check_stock_before_order) fires BEFORE each INSERT into ORDER_ITEMS. If stock_qty &lt; requested quantity, it raises SIGNAL SQLSTATE '45000' (user-defined exception). The EXIT HANDLER in sp_place_order catches this → ROLLBACK (undoes all inserts so far) → sets order_id=-1 → RESIGNAL to API caller → API returns error to frontend.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">What does the CURSOR in sp_place_order do?</div><div class="qa-a">A cursor iterates over a result set row-by-row inside procedural SQL. Here it reads each cart item (product_id, quantity, price) and inserts it into ORDER_ITEMS one at a time. This is necessary because Trigger 1 (stock check) fires per INSERT — we need row-by-row processing. Pattern: DECLARE CURSOR FOR SELECT... → OPEN → LOOP: FETCH INTO vars → INSERT → END LOOP → CLOSE.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">How does avg_rating stay accurate automatically?</div><div class="qa-a">Three AFTER triggers on REVIEWS: Trigger 4 (INSERT), 5 (UPDATE), 6 (DELETE) — each recalculates and writes back to PRODUCTS: UPDATE PRODUCTS SET avg_rating = (SELECT AVG(rating) FROM REVIEWS WHERE product_id = NEW.product_id). Trigger 6 uses COALESCE(AVG,0) because AVG of empty set = NULL. This is intentional denormalisation for performance — no JOIN needed on every page load.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">Why does AUDIT_LOG have no foreign keys?</div><div class="qa-a">An audit log must be permanent and immutable. If AUDIT_LOG.record_id had a FK to PRODUCTS, deleting a product would either (a) cascade-delete its audit trail (destroying evidence) or (b) block deletion (management problem). No FKs makes it append-only. It records history that must survive regardless of what happens to the source records.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">What is SIGNAL SQLSTATE '45000'?</div><div class="qa-a">MySQL's mechanism to raise a user-defined exception from a trigger or procedure. SQLSTATE '45000' = unhandled user-defined exception. It aborts the current statement, propagates up through the call stack, and if inside a transaction triggers a ROLLBACK unless caught by a DECLARE EXIT HANDLER FOR SQLEXCEPTION. The message text is user-readable: "Insufficient stock for this product".</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">Explain the EAV pattern in PRODUCT_ATTRIBUTES</div><div class="qa-a">Entity-Attribute-Value: one row per attribute per product. (product_id=1, attr_name='RAM', attr_value='8GB'). Used because different product categories have completely different specs — a smartphone needs RAM/Storage/OS, a tennis racket needs string_tension/grip_size/shaft_flex. Adding 50+ nullable columns to PRODUCTS for all possible specs would waste space and be unmanageable. EAV trades query simplicity for flexibility.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">How does the frontend work without a backend server?</div><div class="qa-a">Next.js output:"export" generates fully static HTML+CSS+JS files. All data fetching is client-side via fetch() in useEffect hooks. The Railway backend is optional — if unreachable, the catch block silently keeps MOCK_PRODUCTS (8 hardcoded products in data/products.ts). The "Live · Railway DB" / "Offline · Mock data" badge in the corner shows which source is active.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">What is the self-referencing FK in CATEGORIES?</div><div class="qa-a">parent_id is a FK pointing back to category_id in the same CATEGORIES table. NULL = top-level. Electronics (id=1, parent=NULL) → Smartphones (id=6, parent=1). Enables unlimited hierarchy depth. ON DELETE SET NULL means if a parent is deleted, children become top-level (parent_id=NULL) rather than being deleted or orphaned.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">What are the 7 coupon codes and how do they work?</div><div class="qa-a">WELCOME10 (10%, any order, max AED500), SUMMER20 (20%, min AED200, max AED800), FLASH50 (50%, min AED1000, max AED2000), VIP30 (30%, min AED500, max AED1500), STUDENT15 (15%, min AED100, max AED300), FLAT100 (AED100 off, min AED500), TECH500 (AED500 off, min AED5000). fn_validate_coupon checks all conditions. fn_apply_coupon calculates discount. Trigger 7 auto-increments used_count per order.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">Why is email VARCHAR(191) not VARCHAR(255)?</div><div class="qa-a">MySQL InnoDB with utf8mb4 charset has a 767-byte index limit per column. utf8mb4 uses up to 4 bytes per character. 255 × 4 = 1020 bytes which exceeds the limit. 191 × 4 = 764 bytes — just under 767. So VARCHAR(191) is the maximum length for a utf8mb4 column to have a regular index (UNIQUE). This is a well-known MySQL constraint.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">Difference between RANK(), DENSE_RANK(), ROW_NUMBER()?</div><div class="qa-a">All are window functions with OVER (PARTITION BY ... ORDER BY ...). For scores [100, 100, 90]: RANK() → 1,1,3 (skips 2 after tie). DENSE_RANK() → 1,1,2 (no gap). ROW_NUMBER() → 1,2,3 (unique, arbitrary for ties). We use RANK() in Q3 to rank products by revenue within each category — two products with equal revenue get the same rank.</div></div>
+
+  <div class="qa"><div class="qa-q" onclick="toggle(this)">What is the difference between BEFORE and AFTER triggers?</div><div class="qa-a">BEFORE triggers fire before the operation and can modify NEW.column values (useful for auto-generating slugs, enforcing defaults, blocking inserts via SIGNAL). AFTER triggers fire after the operation succeeds and can't modify the row that was just changed — used for cascading actions like updating related tables, writing to AUDIT_LOG, or sending notifications. You can't UPDATE the same table in a BEFORE trigger (MySQL restriction — prevents recursion).</div></div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<div style="background:#050508;border-top:1px solid var(--border);padding:2rem;text-align:center">
+  <p style="color:var(--muted);font-size:12.5px">ShopSphere · CS F212 Database Systems · BITS Pilani Dubai · 2025–26</p>
+  <p style="color:#3a3a55;font-size:12px;margin-top:6px">
+    <a href="https://github.com/292akhil2929-cmyk/dbs2" target="_blank" style="color:#3a3a55">github.com/292akhil2929-cmyk/dbs2</a> &nbsp;·&nbsp;
+    <a href="https://292akhil2929-cmyk.github.io/dbs2" target="_blank" style="color:#3a3a55">Live Site</a> &nbsp;·&nbsp;
+    <a href="https://shopsphere-production-4454.up.railway.app" target="_blank" style="color:#3a3a55">Railway API</a>
+  </p>
+</div>
+
+<script>
+function toggle(el){
+  el.classList.toggle('open');
+  const a=el.nextElementSibling;
+  a.classList.toggle('show');
+}
+</script>
+</body>
+</html>
