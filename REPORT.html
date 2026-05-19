@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ShopSphere — CS F212 DBMS Assignment Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-900: #111827;
+    --blue-50: #eff6ff;
+    --blue-100: #dbeafe;
+    --blue-600: #2563eb;
+    --blue-700: #1d4ed8;
+    --emerald-50: #ecfdf5;
+    --emerald-100: #d1fae5;
+    --emerald-600: #059669;
+    --amber-50: #fffbeb;
+    --amber-100: #fef3c7;
+    --amber-600: #d97706;
+    --red-50: #fef2f2;
+    --red-100: #fee2e2;
+    --red-600: #dc2626;
+    --purple-50: #faf5ff;
+    --purple-100: #ede9fe;
+    --purple-600: #7c3aed;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #ffffff;
+    color: var(--gray-900);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    min-height: 100vh;
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37,99,235,0.15) 0%, transparent 70%);
+  }
+
+  .cover-logo {
+    width: 64px; height: 64px;
+    background: white;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .cover-logo svg { width: 32px; height: 32px; }
+
+  .cover-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 100px;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .cover h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+    color: white;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .cover h1 span { color: rgba(255,255,255,0.4); }
+
+  .cover-sub {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+
+  .cover-team {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .cover-team-member {
+    padding: 6px 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .cover-team-member span {
+    color: rgba(255,255,255,0.35);
+    font-weight: 400;
+    margin-left: 6px;
+  }
+
+  .cover-stats {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    position: relative;
+  }
+
+  .cover-stat { text-align: center; }
+  .cover-stat-num { font-size: 2rem; font-weight: 800; color: white; line-height: 1; }
+  .cover-stat-label { font-size: 11px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+
+  .alert-box {
+    margin-top: 2.5rem;
+    padding: 12px 20px;
+    background: rgba(234,179,8,0.1);
+    border: 1px solid rgba(234,179,8,0.3);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    max-width: 600px;
+    position: relative;
+  }
+
+  .alert-box strong { color: #fbbf24; }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── TOC ── */
+  .toc-section {
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 3rem 0;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 8px;
+    margin-top: 1.5rem;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--gray-700);
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+
+  .toc-item:hover { border-color: var(--black); color: var(--black); background: var(--gray-50); }
+
+  .toc-num {
+    width: 22px; height: 22px;
+    background: var(--black);
+    color: white;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 2rem;
+  }
+
+  .section-num {
+    width: 42px; height: 42px;
+    background: var(--black);
+    color: white;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .section h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--black);
+    line-height: 1.2;
+  }
+
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--black);
+    margin: 2rem 0 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  p { color: var(--gray-700); margin-bottom: 0.75rem; }
+
+  strong { color: var(--black); font-weight: 600; }
+
+  /* ── CODE ── */
+  pre {
+    background: #0f1117;
+    color: #e2e8f0;
+    padding: 1.25rem 1.5rem;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 12.5px;
+    line-height: 1.7;
+    margin: 1rem 0;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: var(--gray-100);
+    color: #e11d48;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; margin: 1rem 0; border-radius: 10px; border: 1px solid var(--gray-200); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  th {
+    background: var(--gray-900);
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: var(--gray-50); }
+
+  /* ── CARDS ── */
+  .card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin: 1rem 0;
+  }
+
+  .card-blue { background: var(--blue-50); border-color: var(--blue-100); }
+  .card-emerald { background: var(--emerald-50); border-color: var(--emerald-100); }
+  .card-amber { background: var(--amber-50); border-color: var(--amber-100); }
+  .card-red { background: var(--red-50); border-color: var(--red-100); }
+  .card-purple { background: var(--purple-50); border-color: var(--purple-100); }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .card-blue .card-title { color: var(--blue-700); }
+  .card-emerald .card-title { color: var(--emerald-600); }
+  .card-amber .card-title { color: var(--amber-600); }
+  .card-red .card-title { color: var(--red-600); }
+  .card-purple .card-title { color: var(--purple-600); }
+
+  /* ── FD BOX ── */
+  .fd-box {
+    background: #0f1117;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin: 1rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  .fd-box .fd-key { color: #fbbf24; }
+  .fd-box .fd-arrow { color: #6b7280; }
+  .fd-box .fd-attrs { color: #86efac; }
+  .fd-box .fd-comment { color: #6b7280; font-size: 11.5px; }
+
+  /* ── TRIGGER / PROC HEADERS ── */
+  .obj-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 2rem 0 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .obj-badge {
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .badge-trigger { background: #fef3c7; color: #92400e; }
+  .badge-before  { background: #fee2e2; color: #991b1b; }
+  .badge-after   { background: #dcfce7; color: #166534; }
+  .badge-proc    { background: #ede9fe; color: #5b21b6; }
+  .badge-func    { background: #dbeafe; color: #1e40af; }
+  .badge-view    { background: #fce7f3; color: #9d174d; }
+  .badge-insert  { background: #fef9c3; color: #713f12; }
+  .badge-update  { background: #e0f2fe; color: #0c4a6e; }
+  .badge-delete  { background: #fce7f3; color: #831843; }
+
+  .obj-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+  }
+
+  /* ── LISTS ── */
+  ul, ol { padding-left: 1.4rem; margin: 0.5rem 0 0.75rem; }
+  li { color: var(--gray-700); margin-bottom: 4px; }
+
+  /* ── DIVIDERS ── */
+  .divider { height: 1px; background: var(--gray-100); margin: 1.5rem 0; }
+
+  /* ── CHEATSHEET ── */
+  .qa-item {
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+
+  .qa-q {
+    background: var(--gray-900);
+    color: white;
+    padding: 10px 16px;
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  .qa-a {
+    padding: 12px 16px;
+    font-size: 13.5px;
+    color: var(--gray-700);
+    line-height: 1.6;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    .cover { min-height: auto; padding: 3rem; page-break-after: always; }
+    .section { page-break-inside: avoid; }
+    pre { font-size: 10.5px; }
+    table { font-size: 11.5px; }
+    .no-print { display: none; }
+  }
+
+  /* ── FOOTER ── */
+  .report-footer {
+    background: var(--black);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 2rem;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     COVER
+══════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+  </div>
+  <div class="cover-badge">CS F212 · Database Systems · BITS Pilani Dubai</div>
+  <h1>ShopSphere<br/><span>Assignment Report</span></h1>
+  <p class="cover-sub">Full-Stack E-Commerce Platform · MySQL · Next.js · Railway</p>
+
+  <div class="cover-team">
+    <div class="cover-team-member">Rehan <span>Backend</span></div>
+    <div class="cover-team-member">Mani <span>Backend</span></div>
+    <div class="cover-team-member">Raghav <span>Backend</span></div>
+    <div class="cover-team-member">Akhil <span>Frontend</span></div>
+    <div class="cover-team-member">Zayed <span>Report</span></div>
+  </div>
+
+  <div class="cover-stats">
+    <div class="cover-stat"><div class="cover-stat-num">20</div><div class="cover-stat-label">Tables</div></div>
+    <div class="cover-stat"><div class="cover-stat-num">7</div><div class="cover-stat-label">Views</div></div>
+    <div class="cover-stat"><div class="cover-stat-num">7</div><div class="cover-stat-label">Functions</div></div>
+    <div class="cover-stat"><div class="cover-stat-num">14</div><div class="cover-stat-label">Triggers</div></div>
+    <div class="cover-stat"><div class="cover-stat-num">9</div><div class="cover-stat-label">Procedures</div></div>
+  </div>
+
+  <div class="alert-box">
+    <strong>⚠ Evaluation Day:</strong> Railway sleeps after 15 min. If the site shows "Offline · Mock data", go to <strong>railway.app</strong> → ShopSphere project → click <strong>Redeploy</strong> to wake it. The frontend always works on mock data.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TABLE OF CONTENTS
+══════════════════════════════════════════════════════════ -->
+<div class="toc-section">
+  <div class="container">
+    <h2 style="font-size:1.4rem;font-weight:800;letter-spacing:-0.03em;color:var(--black);margin-bottom:0.25rem">Table of Contents</h2>
+    <p style="font-size:13px;color:var(--gray-500);margin-bottom:0">Click any section to jump directly to it.</p>
+    <div class="toc-grid">
+      <a href="#s1" class="toc-item"><span class="toc-num">1</span>Problem Statement</a>
+      <a href="#s2" class="toc-item"><span class="toc-num">2</span>System Architecture</a>
+      <a href="#s3" class="toc-item"><span class="toc-num">3</span>ER Diagram</a>
+      <a href="#s4" class="toc-item"><span class="toc-num">4</span>All 20 Tables</a>
+      <a href="#s5" class="toc-item"><span class="toc-num">5</span>Normalization (1NF → BCNF)</a>
+      <a href="#s6" class="toc-item"><span class="toc-num">6</span>Views (7)</a>
+      <a href="#s7" class="toc-item"><span class="toc-num">7</span>Stored Functions (7)</a>
+      <a href="#s8" class="toc-item"><span class="toc-num">8</span>Triggers (14)</a>
+      <a href="#s9" class="toc-item"><span class="toc-num">9</span>Stored Procedures (9)</a>
+      <a href="#s10" class="toc-item"><span class="toc-num">10</span>Complex Queries</a>
+      <a href="#s11" class="toc-item"><span class="toc-num">11</span>Frontend Architecture</a>
+      <a href="#s12" class="toc-item"><span class="toc-num">12</span>Deployment</a>
+      <a href="#s13" class="toc-item"><span class="toc-num">13</span>Quick-Reference Cheat Sheet</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 1 — PROBLEM STATEMENT
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s1">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <h2>Problem Statement</h2>
+  </div>
+
+  <h3>What we built</h3>
+  <p>ShopSphere is a full-stack e-commerce platform for tech and lifestyle products targeting UAE consumers. Customers browse products, add them to a persistent cart, apply discount coupons, and place orders. Admins manage inventory, view analytics, and run promotions. The project demonstrates a production-grade relational database alongside a modern React frontend.</p>
+
+  <h3>Why this domain</h3>
+  <p>E-commerce is the canonical domain for relational databases because it naturally exercises every concept in CS F212:</p>
+  <ul>
+    <li><strong>Entity modelling</strong> — products, users, orders are distinct real-world entities</li>
+    <li><strong>Relationships</strong> — orders contain many items, users have many addresses, categories can have sub-categories (self-referencing FK)</li>
+    <li><strong>Normalization</strong> — a naive single-table design violates 1NF (multiple images per product), 2NF (address depends on user not order), and BCNF (brand info creates a transitive dependency through product)</li>
+    <li><strong>Transactions</strong> — placing an order must atomically deduct stock, record items, create a payment record, and clear the cart — partial failure must rollback everything</li>
+    <li><strong>Triggers</strong> — stock deducted automatically on order insert, restored on cancellation, ratings recalculated on review changes</li>
+    <li><strong>Analytics</strong> — views and procedures provide revenue reports, customer lifetime value, low-stock alerts without repeated joins in application code</li>
+  </ul>
+
+  <div class="card card-blue" style="margin-top:1.5rem">
+    <div class="card-title">Live Links</div>
+    <p style="margin:0;font-size:13.5px">
+      <strong>Frontend:</strong> https://292akhil2929-cmyk.github.io/dbs2/shop<br/>
+      <strong>Backend API:</strong> https://shopsphere-production-4454.up.railway.app<br/>
+      <strong>GitHub:</strong> https://github.com/292akhil2929-cmyk/dbs2
+    </p>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 2 — ARCHITECTURE
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s2">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <h2>System Architecture</h2>
+  </div>
+
+<pre>
+┌──────────────────────────────────────────────────────────────┐
+│                        CLIENT BROWSER                         │
+│                                                               │
+│   Next.js 14 (Static Export → GitHub Pages)                  │
+│   ┌──────────┐ ┌──────────┐ ┌────────────┐ ┌─────────────┐  │
+│   │  Navbar  │ │HeroSection│ │ProductGrid │ │ Cart Drawer │  │
+│   └──────────┘ └──────────┘ └────────────┘ └─────────────┘  │
+│           │ GET /api/products (on page load)                  │
+│           │ POST /api/orders  (on checkout)                   │
+└───────────┼──────────────────────────────────────────────────┘
+            │  HTTPS / JSON
+┌───────────▼──────────────────────────────────────────────────┐
+│           Railway  (Node.js / Express REST API)               │
+│                                                               │
+│   GET  /api/products  → SELECT + JOINs on PRODUCTS           │
+│   POST /api/orders    → INSERT into ORDERS + ORDER_ITEMS      │
+└───────────┬──────────────────────────────────────────────────┘
+            │  MySQL driver
+┌───────────▼──────────────────────────────────────────────────┐
+│           Railway Database (MySQL 8)                          │
+│                                                               │
+│   20 tables · 7 views · 7 functions · 14 triggers · 9 procs  │
+└──────────────────────────────────────────────────────────────┘</pre>
+
+  <h3>End-to-end Order Flow</h3>
+  <ol>
+    <li>User clicks "Add to Cart" → <strong>React state update</strong> (no DB call yet)</li>
+    <li>User opens cart, clicks "Place Order"</li>
+    <li>Frontend <code>fetch POST /api/orders</code> with items + total</li>
+    <li>Railway API <strong>starts a transaction</strong>, inserts into ORDERS</li>
+    <li>For each cart item: <code>INSERT INTO ORDER_ITEMS</code></li>
+    <li><strong>Trigger 1</strong> (<code>trg_check_stock_before_order</code>) fires — validates stock; SIGNAL if insufficient → transaction rolls back</li>
+    <li><strong>Trigger 2</strong> (<code>trg_deduct_stock_after_order</code>) fires — decrements <code>stock_qty</code></li>
+    <li><strong>Trigger 7</strong> (<code>trg_increment_coupon_usage</code>) fires — increments <code>used_count</code></li>
+    <li><strong>Trigger 10</strong> (<code>trg_audit_product_update</code>) fires — logs stock change to AUDIT_LOG</li>
+    <li><strong>Trigger 13</strong> fires — records status in ORDER_STATUS_HISTORY + sends notification</li>
+    <li>COMMIT → response 200 → frontend shows "Order Placed!"</li>
+  </ol>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 3 — ER DIAGRAM
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s3">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <h2>Entity-Relationship Diagram</h2>
+  </div>
+
+<pre>
+CATEGORIES ─── (self-ref: parent_id → category_id)
+    │ 1:N
+    ▼
+PRODUCTS ──────── PRODUCT_IMAGES       (1 product → many images)
+    │  ├─────── PRODUCT_ATTRIBUTES     (1 product → many EAV specs)
+    │  └─────── PRODUCT_TAGS ──── TAGS (M:N junction)
+    │
+BRANDS ──────────── PRODUCTS           (brand_id FK in PRODUCTS)
+
+USERS ──┬─── ADDRESSES                 (1 user → many addresses)
+        ├─── ORDERS                    (1 user → many orders)
+        ├─── CART_ITEMS                (1 user → many cart rows)
+        ├─── WISHLISTS                 (1 user → many saves)
+        ├─── REVIEWS                   (1 user → many reviews)
+        └─── NOTIFICATIONS             (1 user → many notifications)
+
+ORDERS ─┬─── ORDER_ITEMS               (1 order → many line items)
+        ├─── PAYMENTS                  (1:1 — UNIQUE on order_id)
+        └─── ORDER_STATUS_HISTORY      (1 order → many transitions)
+
+COUPONS ──── ORDERS                    (nullable FK — optional coupon)
+
+PRODUCTS ─── ORDER_ITEMS  (product in many orders)
+PRODUCTS ─── CART_ITEMS   (product in many carts)
+PRODUCTS ─── WISHLISTS    (product in many wishlists)
+PRODUCTS ─── REVIEWS      (product has many reviews)
+
+SHIPPING_ZONES   (standalone — looked up by emirate via function)
+AUDIT_LOG        (standalone — no FKs — immutable audit trail)</pre>
+
+  <h3>Key Relationship Notes</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>Relationship</th><th>Type</th><th>Implementation</th></tr>
+    <tr><td>Category → sub-categories</td><td>Self-ref 1:N</td><td><code>parent_id FK → category_id</code> same table; ON DELETE SET NULL</td></tr>
+    <tr><td>Product → multiple images</td><td>1:N</td><td>PRODUCT_IMAGES with <code>is_primary</code> flag</td></tr>
+    <tr><td>Product → flexible specs</td><td>1:N EAV</td><td>PRODUCT_ATTRIBUTES (attr_name, attr_value)</td></tr>
+    <tr><td>Product ↔ Tags</td><td>M:N</td><td>PRODUCT_TAGS junction table — composite PK</td></tr>
+    <tr><td>Order → Payment</td><td>1:1</td><td>UNIQUE KEY on <code>order_id</code> in PAYMENTS</td></tr>
+    <tr><td>Review → must be buyer</td><td>Verified FK</td><td>REVIEWS has <code>order_id FK</code> — only people with real orders review</td></tr>
+  </table>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 4 — ALL 20 TABLES
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s4">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <h2>Relational Schema — All 20 Tables</h2>
+  </div>
+
+  <!-- TABLE 1 -->
+  <h3>Table 1 — CATEGORIES</h3>
+  <p><strong>Purpose:</strong> Product category hierarchy. Self-referencing FK enables unlimited nesting (Electronics → Smartphones → Flagship Phones).</p>
+  <div class="table-wrap"><table>
+    <tr><th>Column</th><th>Type</th><th>Constraint</th><th>Why it exists</th></tr>
+    <tr><td><code>category_id</code></td><td>INT</td><td>PK, AUTO_INCREMENT</td><td>Surrogate key — MySQL auto-generates unique integers</td></tr>
+    <tr><td><code>name</code></td><td>VARCHAR(100)</td><td>NOT NULL, UNIQUE</td><td>Category name; UNIQUE enforces no duplicate categories</td></tr>
+    <tr><td><code>parent_id</code></td><td>INT</td><td>FK → CATEGORIES, NULL OK</td><td>NULL = top-level. Points to own table. ON DELETE SET NULL so children survive parent deletion</td></tr>
+    <tr><td><code>description</code></td><td>TEXT</td><td>optional</td><td>Human-readable description for category pages</td></tr>
+    <tr><td><code>is_active</code></td><td>TINYINT(1)</td><td>DEFAULT 1</td><td>Soft-delete — 0 hides without destroying data or breaking FKs</td></tr>
+  </table></div>
+  <div class="card card-blue"><div class="card-title">Self-Referencing FK</div><p style="margin:0;font-size:13.5px">The <code>fk_cat_parent</code> constraint points back to the same table. <code>ON DELETE SET NULL</code> means if "Electronics" is deleted, "Smartphones" becomes top-level (parent_id → NULL) rather than being deleted or orphaned.</p></div>
+
+  <!-- TABLE 2 -->
+  <h3>Table 2 — USERS</h3>
+  <p><strong>Purpose:</strong> All registered users. Role ENUM controls access levels.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Column</th><th>Type / Constraint</th><th>Why it exists</th></tr>
+    <tr><td><code>email</code></td><td>VARCHAR(191), UNIQUE</td><td>191 chars because utf8mb4 + InnoDB index limit is 767 bytes; 191×4=764, just under limit</td></tr>
+    <tr><td><code>password_hash</code></td><td>VARCHAR(255)</td><td>bcrypt hash — never plaintext. Length 255 holds full bcrypt output</td></tr>
+    <tr><td><code>role</code></td><td>ENUM('customer','admin','vendor')</td><td>DB-level restriction — can't insert invalid role values</td></tr>
+    <tr><td><code>is_active</code></td><td>TINYINT(1) DEFAULT 1</td><td>Soft-delete — deactivate without losing order history</td></tr>
+    <tr><td><code>last_login</code></td><td>TIMESTAMP NULL</td><td>NULL until first login — tracks engagement</td></tr>
+  </table></div>
+
+  <!-- TABLE 3 -->
+  <h3>Table 3 — ADDRESSES</h3>
+  <p><strong>Purpose:</strong> Delivery addresses separated from USERS. One user → many addresses (home, office…).</p>
+  <div class="card card-amber"><div class="card-title">2NF Justification</div><p style="margin:0;font-size:13.5px">If street/city/country were in ORDERS, they'd depend on the user, not the order — a partial dependency. Extracting to ADDRESSES resolves this. Users can also reuse addresses across multiple orders.</p></div>
+  <div class="table-wrap"><table>
+    <tr><th>Column</th><th>Why it exists</th></tr>
+    <tr><td><code>user_id FK CASCADE</code></td><td>Addresses deleted with user — CASCADE DELETE</td></tr>
+    <tr><td><code>label</code></td><td>'Home' / 'Office' — shows in UI dropdown</td></tr>
+    <tr><td><code>is_default</code></td><td>Only one default per user — enforced by Trigger 11</td></tr>
+    <tr><td><code>country DEFAULT 'UAE'</code></td><td>Platform is UAE-centric; reduces data entry friction</td></tr>
+  </table></div>
+
+  <!-- TABLE 4 -->
+  <h3>Table 4 — BRANDS</h3>
+  <p><strong>Purpose:</strong> Brand entity extracted from PRODUCTS to eliminate transitive dependency and achieve BCNF.</p>
+  <div class="card card-red"><div class="card-title">BCNF Justification</div><p style="margin:0;font-size:13.5px">Without BRANDS: <code>product_id → brand_name → {country, website}</code> — transitive dependency. With BRANDS: <code>brand_id → {name, country, website}</code> and <code>product_id → brand_id</code> only. No transitive dep.</p></div>
+  <p><strong>15 seed brands:</strong> Apple, Samsung, Sony, Nike, Levi's, IKEA, Dell, JBL, Lenovo, DJI, Instant Pot, Ninja, Zara, Yonex, OnePlus</p>
+
+  <!-- TABLE 5 -->
+  <h3>Table 5 — PRODUCTS</h3>
+  <p><strong>Purpose:</strong> Central product catalogue. Most foreign keys and indexes of any table.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Column</th><th>Type / Constraint</th><th>Why it exists</th></tr>
+    <tr><td><code>price</code></td><td>DECIMAL(10,2) CHECK ≥ 0</td><td>DECIMAL not FLOAT — avoids floating-point rounding errors on monetary values</td></tr>
+    <tr><td><code>compare_price</code></td><td>DECIMAL(10,2) nullable</td><td>Original/RRP — shown as strikethrough. NULL for items never discounted</td></tr>
+    <tr><td><code>slug</code></td><td>VARCHAR(300) UNIQUE</td><td>URL-safe identifier: "iphone-15-pro". Auto-generated by Trigger 8</td></tr>
+    <tr><td><code>avg_rating</code></td><td>DECIMAL(3,2) DEFAULT 0</td><td>Cached average — maintained by Triggers 4/5/6. Avoids COUNT+AVG join on every page load</td></tr>
+    <tr><td><code>review_count</code></td><td>INT DEFAULT 0</td><td>Cached count — maintained by same triggers. Intentional denormalisation for performance</td></tr>
+    <tr><td><code>weight_kg</code></td><td>DECIMAL(6,3)</td><td>Used by fn_shipping_fee for weight-based shipping calculation</td></tr>
+    <tr><td><code>FULLTEXT INDEX</code></td><td>on (name, description)</td><td>Enables MATCH()...AGAINST() full-text search in sp_search_products</td></tr>
+  </table></div>
+
+  <!-- TABLE 6 -->
+  <h3>Table 6 — PRODUCT_IMAGES</h3>
+  <div class="card card-emerald"><div class="card-title">1NF Justification</div><p style="margin:0;font-size:13.5px">A product has multiple images. Columns <code>img1_url, img2_url, img3_url</code> would violate 1NF (repeating groups). One row per image — fully atomic.</p></div>
+  <p>Key columns: <code>is_primary TINYINT(1)</code> — the main display image. Views and JOINs use <code>WHERE pi.is_primary = 1</code> to get exactly one image per product.</p>
+
+  <!-- TABLE 7 -->
+  <h3>Table 7 — PRODUCT_ATTRIBUTES (EAV)</h3>
+  <p><strong>Purpose:</strong> Flexible product specifications using the Entity-Attribute-Value pattern.</p>
+  <div class="card card-purple"><div class="card-title">Why EAV</div><p style="margin:0;font-size:13.5px">A smartphone has RAM, Storage, OS. A racket has string tension, grip size, shaft flex. These can't be fixed columns — different categories have completely different specs. EAV uses one row per attribute: <code>(product_id, attr_name, attr_value)</code>.</p></div>
+  <p>Example data for iPhone 15 Pro: (Storage: 256GB), (RAM: 8GB), (Display: 6.1 inch Super Retina XDR), (OS: iOS 17)</p>
+
+  <!-- TABLE 8 -->
+  <h3>Table 8 — COUPONS</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Code</th><th>Type</th><th>Value</th><th>Min Order</th><th>Max Discount</th></tr>
+    <tr><td><code>WELCOME10</code></td><td>%</td><td>10%</td><td>AED 0</td><td>AED 500</td></tr>
+    <tr><td><code>SUMMER20</code></td><td>%</td><td>20%</td><td>AED 200</td><td>AED 800</td></tr>
+    <tr><td><code>FLASH50</code></td><td>%</td><td>50%</td><td>AED 1000</td><td>AED 2000</td></tr>
+    <tr><td><code>VIP30</code></td><td>%</td><td>30%</td><td>AED 500</td><td>AED 1500</td></tr>
+    <tr><td><code>STUDENT15</code></td><td>%</td><td>15%</td><td>AED 100</td><td>AED 300</td></tr>
+    <tr><td><code>FLAT100</code></td><td>fixed</td><td>AED 100</td><td>AED 500</td><td>—</td></tr>
+    <tr><td><code>TECH500</code></td><td>fixed</td><td>AED 500</td><td>AED 5000</td><td>—</td></tr>
+  </table></div>
+
+  <!-- TABLE 9 -->
+  <h3>Table 9 — ORDERS</h3>
+  <p>Master order record. Key columns:</p>
+  <ul>
+    <li><code>subtotal</code>, <code>discount_amt</code>, <code>shipping_fee</code>, <code>tax_amt</code>, <code>total_amount</code> — all stored separately for transparent pricing</li>
+    <li><code>status ENUM</code> — pending → confirmed → processing → shipped → delivered / cancelled / refunded</li>
+    <li><code>coupon_id FK ON DELETE SET NULL</code> — deleting a coupon doesn't delete order history</li>
+  </ul>
+
+  <!-- TABLE 10 -->
+  <h3>Table 10 — ORDER_ITEMS</h3>
+  <div class="card card-amber"><div class="card-title">Price Snapshot Design</div><p style="margin:0;font-size:13.5px"><code>unit_price</code> stores the price <em>at time of order</em>. If we derived it from <code>PRODUCTS.price</code>, the order history would change when prices update. Storing it is intentional and correct — it also removes the transitive dependency <code>item_id → product_id → current_price</code>.</p></div>
+  <p><code>UNIQUE KEY uq_order_product(order_id, product_id)</code> — prevents the same product appearing twice in one order.</p>
+
+  <!-- TABLE 11 -->
+  <h3>Table 11 — PAYMENTS</h3>
+  <p><strong>1:1 with ORDERS</strong> via <code>UNIQUE KEY on order_id</code>. Supports 7 payment methods: credit_card, debit_card, paypal, bank_transfer, cash_on_delivery, apple_pay, google_pay. <code>gateway_resp TEXT</code> stores raw JSON from payment gateway for dispute resolution.</p>
+
+  <!-- TABLE 12 -->
+  <h3>Table 12 — REVIEWS</h3>
+  <p>Verified purchase reviews. <code>order_id FK</code> ensures only actual buyers can review — cannot insert a review without a real order. <code>UNIQUE(user_id, product_id)</code> — one review per user per product. Rating triggers (4/5/6) keep <code>PRODUCTS.avg_rating</code> auto-updated.</p>
+
+  <!-- TABLE 13 -->
+  <h3>Table 13 — CART_ITEMS</h3>
+  <p>Persistent cart stored in DB (not localStorage). <code>UNIQUE(user_id, product_id)</code> prevents duplicate cart entries. <code>CASCADE DELETE</code> on both user and product FKs.</p>
+
+  <!-- TABLE 14 -->
+  <h3>Table 14 — WISHLISTS</h3>
+  <p>Saved items. Trigger 14 uses this table to send restock notifications — when a wishlisted product comes back in stock (0 → >0), all users who saved it get an in-app notification.</p>
+
+  <!-- TABLE 15 -->
+  <h3>Table 15 — AUDIT_LOG</h3>
+  <p>Immutable audit trail. Written by triggers — never by application code. <strong>No FKs on changed_by or record_id</strong> — intentional. If a user or product is deleted, the audit record must survive. Stores old/new values as <code>JSON</code> columns for full before/after state.</p>
+
+  <!-- TABLE 16 -->
+  <h3>Table 16 — NOTIFICATIONS</h3>
+  <p>In-app notification feed. Written by Trigger 13 (order status changes), Trigger 14 (restock alerts), and <code>sp_broadcast_promo</code> (marketing). <code>idx_notif_unread(user_id, is_read)</code> composite index optimises the very common "get unread count" query.</p>
+
+  <!-- TABLE 17 -->
+  <h3>Table 17 — SHIPPING_ZONES</h3>
+  <p>Per-emirate rates used by <code>fn_zone_shipping_fee</code>. 7 UAE zones: Dubai (AED 10/25, free &gt;500), Abu Dhabi (15/30, free &gt;500), Sharjah (15/30), Ajman (20/35), RAK (20/40), Fujairah (25/45, free &gt;1000), UAQ (20/40).</p>
+
+  <!-- TABLE 18 -->
+  <h3>Table 18 — TAGS</h3>
+  <p>Product labels: Bestseller (#F59E0B amber), New Arrival (#10B981 green), Limited (#EF4444 red), Eco Friendly (#22C55E), Staff Pick (#3B82F6 blue), Clearance (#6B7280 gray), Bundle Deal (#8B5CF6 purple). <code>color_hex CHAR(7)</code> stores CSS hex for UI badges.</p>
+
+  <!-- TABLE 19 -->
+  <h3>Table 19 — PRODUCT_TAGS (Junction)</h3>
+  <div class="card card-emerald"><div class="card-title">1NF Justification</div><p style="margin:0;font-size:13.5px">Without this table, tags would need to be a multi-valued column in PRODUCTS (e.g. "Bestseller,Staff Pick") violating 1NF. The junction table gives each tag assignment its own row. Composite PK <code>(product_id, tag_id)</code> prevents duplicate assignments.</p></div>
+
+  <!-- TABLE 20 -->
+  <h3>Table 20 — ORDER_STATUS_HISTORY</h3>
+  <p>Full audit of every order status transition — required for SLA tracking and dispute resolution. Written by Trigger 13 automatically on every <code>ORDERS.status</code> change. Seed data shows Order #1 going through: pending → confirmed → processing → shipped → delivered with comments at each step.</p>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 5 — NORMALIZATION
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s5">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <h2>Normalization Analysis</h2>
+  </div>
+
+  <p>The naive e-commerce "god table" would look like:</p>
+<pre>OrderLine(order_id, user_name, user_email, street, city, product_name,
+          brand_name, brand_country, category_name, tag1, tag2, tag3,
+          quantity, price)</pre>
+  <p>This violates 1NF (multi-valued tags), 2NF (address depends on user not order), and BCNF (brand_country transitively depends on brand_name). We fix each level:</p>
+
+  <h3>Functional Dependencies — Explicit Notation</h3>
+  <div class="fd-box">
+    <div><span class="fd-comment">-- USERS</span></div>
+    <div><span class="fd-key">user_id</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{email, password_hash, full_name, phone, role, is_active, created_at}</span></div>
+    <div><span class="fd-key">email</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{user_id}</span> <span class="fd-comment">-- email is candidate key (UNIQUE)</span></div>
+    <br/>
+    <div><span class="fd-comment">-- CATEGORIES</span></div>
+    <div><span class="fd-key">category_id</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{name, parent_id, description, icon_url, is_active}</span></div>
+    <div><span class="fd-key">name</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{category_id}</span> <span class="fd-comment">-- name is candidate key (UNIQUE)</span></div>
+    <br/>
+    <div><span class="fd-comment">-- BRANDS</span></div>
+    <div><span class="fd-key">brand_id</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{name, country, website, logo_url, is_active}</span></div>
+    <div><span class="fd-key">name</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{brand_id}</span> <span class="fd-comment">-- name is candidate key (UNIQUE)</span></div>
+    <br/>
+    <div><span class="fd-comment">-- PRODUCTS</span></div>
+    <div><span class="fd-key">product_id</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{category_id, brand_id, name, slug, description, price, compare_price, stock_qty, sku, weight_kg, avg_rating, review_count, is_active, is_featured}</span></div>
+    <div><span class="fd-key">slug</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{product_id}</span> <span class="fd-comment">-- slug is candidate key (UNIQUE)</span></div>
+    <div><span class="fd-key">sku</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{product_id}</span>  <span class="fd-comment">-- sku is candidate key (UNIQUE)</span></div>
+    <br/>
+    <div><span class="fd-comment">-- ORDERS</span></div>
+    <div><span class="fd-key">order_id</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{user_id, address_id, coupon_id, subtotal, discount_amt, shipping_fee, tax_amt, total_amount, status, ordered_at}</span></div>
+    <br/>
+    <div><span class="fd-comment">-- ORDER_ITEMS (composite key)</span></div>
+    <div><span class="fd-key">(order_id, product_id)</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{quantity, unit_price}</span></div>
+    <div><span class="fd-comment">-- unit_price is NOT derived from product_id alone — it is the price AT ORDER TIME (snapshot)</span></div>
+    <br/>
+    <div><span class="fd-comment">-- COUPONS</span></div>
+    <div><span class="fd-key">coupon_id</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{code, type, discount_value, min_order_amt, max_discount, expires_at, max_uses, used_count}</span></div>
+    <div><span class="fd-key">code</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{coupon_id}</span> <span class="fd-comment">-- code is candidate key (UNIQUE)</span></div>
+    <br/>
+    <div><span class="fd-comment">-- PRODUCT_ATTRIBUTES (composite key)</span></div>
+    <div><span class="fd-key">(product_id, attr_name)</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{attr_value}</span></div>
+    <br/>
+    <div><span class="fd-comment">-- PRODUCT_TAGS (pure junction — all attributes are key)</span></div>
+    <div><span class="fd-key">(product_id, tag_id)</span> <span class="fd-arrow">→</span> <span class="fd-attrs">{tagged_at}</span></div>
+  </div>
+
+  <h3>First Normal Form (1NF)</h3>
+  <p><strong>Requirement:</strong> Every attribute must be atomic — no repeating groups, no multi-valued attributes.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Violation</th><th>Fix Applied</th></tr>
+    <tr><td>Product has multiple images → columns img1, img2, img3 in PRODUCTS</td><td>PRODUCT_IMAGES table — one row per image</td></tr>
+    <tr><td>Product has multiple tags → comma string in single column</td><td>PRODUCT_TAGS junction table</td></tr>
+    <tr><td>Product specs vary by category (RAM, string_tension, etc.)</td><td>PRODUCT_ATTRIBUTES EAV table</td></tr>
+    <tr><td>User has multiple addresses</td><td>ADDRESSES table — one row per address</td></tr>
+  </table></div>
+
+  <h3>Second Normal Form (2NF)</h3>
+  <p><strong>Requirement:</strong> In 1NF + every non-key attribute fully depends on the entire primary key (relevant for composite PKs).</p>
+  <div class="card card-amber"><div class="card-title">Violation Example</div><p style="margin:0;font-size:13.5px">If ORDER_ITEMS had <code>(order_id, product_id, quantity, unit_price, user_street, user_city)</code>: <br/>• <code>user_street</code> depends on <code>order_id</code>, not on <code>product_id</code> → partial dependency<br/><strong>Fix:</strong> Address is in ADDRESSES, referenced by ORDERS via <code>address_id FK</code>, not in ORDER_ITEMS at all.</p></div>
+  <p>Our composite-key tables are all in 2NF:</p>
+  <ul>
+    <li><code>(order_id, product_id) → quantity</code> — quantity depends on both (which product in which order)</li>
+    <li><code>(order_id, product_id) → unit_price</code> — price snapshot depends on both</li>
+    <li><code>(product_id, attr_name) → attr_value</code> — value depends on which attribute of which product</li>
+  </ul>
+
+  <h3>Third Normal Form (3NF)</h3>
+  <p><strong>Requirement:</strong> In 2NF + no transitive dependencies (non-key attribute must not depend on another non-key attribute).</p>
+  <div class="card card-red"><div class="card-title">Violation — Brand in PRODUCTS</div><p style="margin:0;font-size:13.5px"><code>product_id → brand_name → {brand_country, brand_website}</code><br/>brand_country only reachable through brand_name → transitive!<br/><strong>Fix:</strong> BRANDS table. Now: <code>product_id → brand_id</code> and <code>brand_id → {name, country, website}</code></p></div>
+  <p>Similarly: <code>product_id → category_name → description</code> was transitive → CATEGORIES table extracted.</p>
+
+  <h3>Boyce-Codd Normal Form (BCNF)</h3>
+  <p><strong>Requirement:</strong> For every non-trivial FD X → Y, X must be a superkey.</p>
+  <p>In our PRODUCTS table, all determinants (<code>product_id</code>, <code>slug</code>, <code>sku</code>) are superkeys ✓<br/>
+  In USERS, determinants (<code>user_id</code>, <code>email</code>) are both superkeys ✓<br/>
+  In BRANDS, determinants (<code>brand_id</code>, <code>name</code>) are both superkeys ✓</p>
+  <p>Had we left brand details in PRODUCTS, <code>brand_name</code> would be a determinant that is NOT a superkey of PRODUCTS → BCNF violation. Extracting BRANDS resolves this.</p>
+
+  <h3>Summary Table</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Design Choice</th><th>Normal Form</th><th>What it fixes</th></tr>
+    <tr><td>PRODUCT_IMAGES separate</td><td>1NF</td><td>Multi-valued images attribute</td></tr>
+    <tr><td>PRODUCT_TAGS junction</td><td>1NF</td><td>Multi-valued M:N tags</td></tr>
+    <tr><td>PRODUCT_ATTRIBUTES EAV</td><td>1NF</td><td>Variable specs per category</td></tr>
+    <tr><td>ADDRESSES separate from USERS</td><td>2NF</td><td>Address depends on user not order</td></tr>
+    <tr><td>BRANDS extracted from PRODUCTS</td><td>3NF / BCNF</td><td>brand_country transitively depended on brand_name</td></tr>
+    <tr><td>CATEGORIES extracted</td><td>3NF / BCNF</td><td>category_description transitively depended on category_name</td></tr>
+    <tr><td>unit_price in ORDER_ITEMS</td><td>Intentional denorm</td><td>Price snapshot — historically correct, not derivable from current price</td></tr>
+    <tr><td>avg_rating cached in PRODUCTS</td><td>Intentional denorm</td><td>Performance — avoids AVG()+COUNT() join on every product load</td></tr>
+  </table></div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 6 — VIEWS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s6">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <h2>Views (7)</h2>
+  </div>
+  <p>Views are stored SELECT statements treated as virtual tables. They simplify complex queries and provide a stable interface over the underlying tables.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-view">VIEW 1</span><span class="obj-name">vw_product_catalog</span></div>
+  <p><strong>Purpose:</strong> Complete product listing with brand, parent category, and primary image — 4-table JOIN pre-built as a view.</p>
+<pre>SELECT p.*,
+  ROUND(((compare_price - price) / compare_price) * 100) AS discount_pct,
+  c.name AS category_name,
+  pc.name AS parent_category,    -- self-join for parent
+  b.name AS brand_name,
+  pi.url AS primary_image
+FROM PRODUCTS p
+JOIN  CATEGORIES c  ON p.category_id = c.category_id
+LEFT JOIN CATEGORIES pc ON c.parent_id = pc.category_id  -- double join same table
+LEFT JOIN BRANDS b  ON p.brand_id = b.brand_id            -- LEFT: books have no brand
+LEFT JOIN PRODUCT_IMAGES pi ON pi.product_id = p.product_id AND pi.is_primary = 1;</pre>
+  <p>The double CATEGORIES join handles hierarchy: <code>c</code> = direct category (Smartphones), <code>pc</code> = parent (Electronics).</p>
+
+  <div class="obj-header"><span class="obj-badge badge-view">VIEW 2</span><span class="obj-name">vw_order_summary</span></div>
+  <p><strong>Purpose:</strong> Admin order dashboard — customer name, address, item count, payment status in one query. <code>CONCAT(street, ', ', city, ', ', country)</code> builds a readable address. <code>COUNT(oi.item_id)</code> counts line items per order.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-view">VIEW 3</span><span class="obj-name">vw_revenue_by_category</span></div>
+  <p><strong>Purpose:</strong> Revenue breakdown per category. Uses <code>SUM(oi.quantity * oi.unit_price)</code> with unit_price (price snapshot) for historical accuracy. Excludes cancelled/refunded orders.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-view">VIEW 4</span><span class="obj-name">vw_low_stock</span></div>
+  <p><strong>Purpose:</strong> Inventory alert — products with ≤10 units. <code>WHERE stock_qty &lt;= 10 AND is_active = 1 ORDER BY stock_qty ASC</code>. Used by <code>sp_dashboard_stats</code>.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-view">VIEW 5</span><span class="obj-name">vw_customer_ltv</span></div>
+  <p><strong>Purpose:</strong> Customer Lifetime Value. LEFT JOIN ORDERS so customers with no orders appear with LTV=0. <code>COALESCE(SUM(total_amount), 0)</code> handles NULL from empty LEFT JOIN. Only counts non-cancelled/refunded orders.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-view">VIEW 6</span><span class="obj-name">vw_product_tags</span></div>
+  <p><strong>Purpose:</strong> Products with tags as concatenated string. Uses MySQL's <code>GROUP_CONCAT(t.name ORDER BY t.name SEPARATOR ', ')</code> to aggregate multiple tag rows into "Bestseller, Staff Pick" — presentational; underlying data remains normalised in PRODUCT_TAGS.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-view">VIEW 7</span><span class="obj-name">vw_unread_notifications</span></div>
+  <p><strong>Purpose:</strong> Unread notification count per user. <code>SUM(CASE WHEN is_read = 0 THEN 1 ELSE 0 END)</code> counts only unread rows — more efficient than two separate subqueries.</p>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 7 — FUNCTIONS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s7">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <h2>Stored Functions (7)</h2>
+  </div>
+  <p>Functions return a single value and can be called inside SELECT/WHERE clauses. They are either DETERMINISTIC (same input → same output, no DB reads) or READS SQL DATA.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-func">FUNCTION 1</span><span class="obj-name">fn_apply_coupon</span></div>
+  <p><strong>Signature:</strong> <code>fn_apply_coupon(subtotal, type, discount_val, max_discount) → DECIMAL</code></p>
+<pre>IF type = 'percentage' THEN
+  disc = ROUND(subtotal * discount_val / 100, 2)
+  IF max_discount IS NOT NULL AND disc > max_discount THEN
+    disc = max_discount   -- cap at max (FLASH50 capped at AED 2000)
+  END IF
+ELSE
+  disc = discount_val     -- fixed amount
+END IF
+IF disc > subtotal THEN disc = subtotal  -- can't discount more than cart value
+RETURN disc</pre>
+  <p>Example: <code>fn_apply_coupon(2000, 'percentage', 50, 800)</code> → 50% of 2000 = 1000, capped at 800 → <strong>returns 800</strong></p>
+
+  <div class="obj-header"><span class="obj-badge badge-func">FUNCTION 2</span><span class="obj-name">fn_discounted_price</span></div>
+  <p>Generic % discount helper. Handles edge cases: NULL price → NULL, pct ≤ 0 → original price, pct ≥ 100 → 0.00. Formula: <code>ROUND(price * (1 - pct/100), 2)</code></p>
+
+  <div class="obj-header"><span class="obj-badge badge-func">FUNCTION 3</span><span class="obj-name">fn_cart_subtotal</span></div>
+  <p><code>SELECT COALESCE(SUM(ci.quantity * p.price), 0) FROM CART_ITEMS ci JOIN PRODUCTS p ...</code> — calculates total cart value. <code>COALESCE(..., 0)</code> returns 0 for empty carts. Called by <code>sp_place_order</code>.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-func">FUNCTION 4</span><span class="obj-name">fn_validate_coupon</span></div>
+  <p>All-in-one validation: checks code exists + is_active + not expired + under max_uses + subtotal ≥ min_order_amt. Returns discount amount or 0 if invalid. Can be used directly in SELECT: <code>SELECT fn_validate_coupon('FLASH50', 1500)</code></p>
+
+  <div class="obj-header"><span class="obj-badge badge-func">FUNCTION 5</span><span class="obj-name">fn_customer_order_count</span></div>
+  <p><code>SELECT COUNT(*) FROM ORDERS WHERE user_id = p AND status NOT IN ('cancelled','refunded')</code> — counts completed orders. Can drive loyalty tier logic.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-func">FUNCTION 6</span><span class="obj-name">fn_shipping_fee</span></div>
+  <div class="table-wrap"><table>
+    <tr><th>Weight</th><th>Fee</th></tr>
+    <tr><td>0 kg</td><td>AED 0</td></tr>
+    <tr><td>≤ 1 kg</td><td>AED 10</td></tr>
+    <tr><td>≤ 5 kg</td><td>AED 20</td></tr>
+    <tr><td>≤ 10 kg</td><td>AED 35</td></tr>
+    <tr><td>&gt; 10 kg</td><td>AED 50</td></tr>
+  </table></div>
+
+  <div class="obj-header"><span class="obj-badge badge-func">FUNCTION 7a</span><span class="obj-name">fn_zone_shipping_fee</span></div>
+  <p><code>fn_zone_shipping_fee(emirate, is_express)</code> — looks up rate from SHIPPING_ZONES. <code>IF(is_express, express_fee, base_fee)</code>. <code>COALESCE</code> fallback to AED 10/25 if emirate not found.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-func">FUNCTION 7b</span><span class="obj-name">fn_price_with_vat</span></div>
+  <p>UAE 5% VAT: <code>ROUND(price * 1.05, 2)</code>. Used in invoice generation. Deterministic — same price always gives same VAT-inclusive price.</p>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 8 — TRIGGERS
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s8">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <h2>Triggers (14)</h2>
+  </div>
+  <p>Triggers execute automatically when INSERT/UPDATE/DELETE occurs on a table. They enforce business rules at the DB level regardless of which application makes the change.</p>
+
+  <div class="obj-header">
+    <span class="obj-badge badge-trigger">TRIGGER 1</span>
+    <span class="obj-badge badge-before">BEFORE INSERT</span>
+    <span class="obj-name">trg_check_stock_before_order</span>
+    <span style="font-size:12px;color:var(--gray-500)">on ORDER_ITEMS</span>
+  </div>
+<pre>SELECT stock_qty INTO v_stock FROM PRODUCTS WHERE product_id = NEW.product_id;
+IF v_stock &lt; NEW.quantity THEN
+  SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insufficient stock';
+END IF</pre>
+  <p>BEFORE — check happens before insert so we can abort cleanly. <code>SIGNAL SQLSTATE '45000'</code> = user-defined exception, aborts statement and triggers ROLLBACK.</p>
+
+  <div class="obj-header">
+    <span class="obj-badge badge-trigger">TRIGGER 2</span>
+    <span class="obj-badge badge-after">AFTER INSERT</span>
+    <span class="obj-name">trg_deduct_stock_after_order</span>
+  </div>
+  <p><code>UPDATE PRODUCTS SET stock_qty = stock_qty - NEW.quantity WHERE product_id = NEW.product_id</code> — fires after insert is committed. Trigger 1 already confirmed stock is sufficient.</p>
+
+  <div class="obj-header">
+    <span class="obj-badge badge-trigger">TRIGGER 3</span>
+    <span class="obj-badge badge-after">AFTER UPDATE</span>
+    <span class="obj-name">trg_restore_stock_on_cancel</span>
+    <span style="font-size:12px;color:var(--gray-500)">on ORDERS</span>
+  </div>
+  <p>Guard: <code>NEW.status = 'cancelled' AND OLD.status NOT IN ('cancelled','refunded')</code> prevents double-restoring. Multi-table UPDATE with JOIN restores all products in one statement. Also writes to AUDIT_LOG.</p>
+
+  <div class="obj-header">
+    <span class="obj-badge badge-trigger">TRIGGERS 4/5/6</span>
+    <span class="obj-badge badge-after">AFTER INSERT/UPDATE/DELETE</span>
+    <span class="obj-name">trg_update_rating_on_*</span>
+    <span style="font-size:12px;color:var(--gray-500)">on REVIEWS</span>
+  </div>
+  <p>Keep <code>avg_rating</code> and <code>review_count</code> in PRODUCTS auto-maintained. Trigger 6 uses <code>COALESCE(..., 0)</code> for when last review is deleted (AVG of empty set = NULL).</p>
+
+  <div class="obj-header">
+    <span class="obj-badge badge-trigger">TRIGGER 7</span>
+    <span class="obj-badge badge-after">AFTER INSERT</span>
+    <span class="obj-name">trg_increment_coupon_usage</span>
+    <span style="font-size:12px;color:var(--gray-500)">on ORDERS</span>
+  </div>
+  <p><code>IF NEW.coupon_id IS NOT NULL THEN UPDATE COUPONS SET used_count = used_count + 1</code> — tracks redemption count for max_uses enforcement.</p>
+
+  <div class="obj-header">
+    <span class="obj-badge badge-trigger">TRIGGER 8</span>
+    <span class="obj-badge badge-before">BEFORE INSERT</span>
+    <span class="obj-name">trg_auto_slug_on_insert</span>
+    <span style="font-size:12px;color:var(--gray-500)">on PRODUCTS</span>
+  </div>
+  <p>Auto-generates slug from name: <code>LOWER(REPLACE(REPLACE(name, ' ', '-'), '/', '-'))</code>. BEFORE trigger can modify NEW.slug. "iPhone 15 Pro" → "iphone-15-pro".</p>
+
+  <div class="obj-header">
+    <span class="obj-badge badge-trigger">TRIGGERS 9/10</span>
+    <span class="obj-badge badge-after">AFTER INSERT/UPDATE</span>
+    <span class="obj-name">trg_audit_product_*</span>
+    <span style="font-size:12px;color:var(--gray-500)">on PRODUCTS</span>
+  </div>
+  <p>Write to AUDIT_LOG using <code>JSON_OBJECT('name', name, 'price', price, 'stock', stock)</code>. Trigger 10 only fires if price or stock changed: <code>IF OLD.price != NEW.price OR OLD.stock_qty != NEW.stock_qty</code>.</p>
+
+  <div class="obj-header">
+    <span class="obj-badge badge-trigger">TRIGGER 11</span>
+    <span class="obj-badge badge-before">BEFORE INSERT</span>
+    <span class="obj-name">trg_single_default_address</span>
+    <span style="font-size:12px;color:var(--gray-500)">on ADDRESSES</span>
+  </div>
+  <p>If new address is is_default=1 and user already has a default: silently set new address to is_default=0. Cannot UPDATE existing default in the same trigger (MySQL restriction — prevents recursive loops). BEFORE trigger can modify NEW.column.</p>
+
+  <div class="obj-header">
+    <span class="obj-badge badge-trigger">TRIGGER 12</span>
+    <span class="obj-badge badge-after">AFTER INSERT</span>
+    <span class="obj-name">trg_audit_user_register</span>
+    <span style="font-size:12px;color:var(--gray-500)">on USERS</span>
+  </div>
+  <p>Logs every new user registration: <code>JSON_OBJECT('email', email, 'role', role)</code> into AUDIT_LOG.</p>
+
+  <div class="obj-header">
+    <span class="obj-badge badge-trigger">TRIGGER 13</span>
+    <span class="obj-badge badge-after">AFTER UPDATE</span>
+    <span class="obj-name">trg_order_status_history</span>
+    <span style="font-size:12px;color:var(--gray-500)">on ORDERS</span>
+  </div>
+  <p>When <code>OLD.status &lt;&gt; NEW.status</code>: (1) INSERT into ORDER_STATUS_HISTORY, (2) INSERT into NOTIFICATIONS for the customer. Two INSERTs, one trigger, one transaction.</p>
+
+  <div class="obj-header">
+    <span class="obj-badge badge-trigger">TRIGGER 14</span>
+    <span class="obj-badge badge-after">AFTER UPDATE</span>
+    <span class="obj-name">trg_notify_restock</span>
+    <span style="font-size:12px;color:var(--gray-500)">on PRODUCTS</span>
+  </div>
+  <p>When <code>OLD.stock_qty = 0 AND NEW.stock_qty &gt; 0</code>: INSERT notifications for all wishlist users via INSERT...SELECT from WISHLISTS. One product restock can trigger thousands of notifications in a single set-based operation.</p>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 9 — STORED PROCEDURES
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s9">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">9</div>
+    <h2>Stored Procedures (9)</h2>
+  </div>
+
+  <div class="obj-header"><span class="obj-badge badge-proc">PROCEDURE 1</span><span class="obj-name">sp_place_order</span></div>
+  <p><strong>The most complex object in the schema</strong> — full checkout in a transaction with 12 steps:</p>
+<pre>sp_place_order(user_id, address_id, coupon_code, pay_method, ship_method,
+               OUT order_id, OUT message)
+
+1. Validate cart not empty (COUNT CART_ITEMS)
+2. Validate address belongs to user (security check)
+3. Resolve coupon (check active + not expired + under max_uses)
+4. fn_cart_subtotal(user_id) → subtotal
+5. Validate minimum order for coupon
+6. fn_apply_coupon(...) → discount
+7. SUM(qty * weight_kg) → total weight
+8. fn_shipping_fee(weight) → shipping (×2 for Express)
+9. (subtotal - discount) × 0.05 → VAT
+10. subtotal - discount + shipping + vat → total
+
+START TRANSACTION
+  INSERT INTO ORDERS
+  CURSOR LOOP: FETCH each cart item → INSERT ORDER_ITEMS
+               (Triggers 1+2 fire per INSERT)
+  INSERT INTO PAYMENTS
+  DELETE FROM CART_ITEMS
+COMMIT</pre>
+  <p><strong>CURSOR:</strong> Iterates cart items row-by-row. Needed because stock-check trigger fires per INSERT, not as a set operation.</p>
+  <p><strong>EXIT HANDLER FOR SQLEXCEPTION:</strong> Catches any SQL error (including Trigger 1's SIGNAL) → ROLLBACK + set order_id=-1 + RESIGNAL.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-proc">PROCEDURE 2</span><span class="obj-name">sp_dashboard_stats</span></div>
+  <p>Returns 10 KPI metrics in one SELECT: total_customers, total_orders, total_revenue, active_products, pending_orders, low_stock_count, total_reviews, avg_order_value, items_in_carts, revenue_last_30d. Each is a correlated subquery evaluated in one pass.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-proc">PROCEDURE 3</span><span class="obj-name">sp_top_selling_products(p_limit)</span></div>
+  <p>Top N products by units_sold with revenue, brand, category. Only counts non-cancelled/refunded orders. Usage: <code>CALL sp_top_selling_products(10)</code></p>
+
+  <div class="obj-header"><span class="obj-badge badge-proc">PROCEDURE 4</span><span class="obj-name">sp_user_order_history(user_id)</span></div>
+  <p>Full order history — 7-table join returning every column needed for a customer order page: order status, pricing, product name, brand, payment method, product image.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-proc">PROCEDURE 5</span><span class="obj-name">sp_restock_product(product_id, qty, admin_id)</span></div>
+  <p>Reads old stock → UPDATE stock_qty → INSERT AUDIT_LOG with old/new values and admin_id → return result. Note: if stock goes from 0 to >0, Trigger 14 fires automatically from this UPDATE.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-proc">PROCEDURE 6</span><span class="obj-name">sp_monthly_revenue(year)</span></div>
+  <p>Revenue by month: <code>GROUP BY MONTH(ordered_at), MONTHNAME(ordered_at)</code>. Usage: <code>CALL sp_monthly_revenue(2026)</code></p>
+
+  <div class="obj-header"><span class="obj-badge badge-proc">PROCEDURE 7</span><span class="obj-name">sp_search_products</span></div>
+  <p>Full-text + filtered search with pagination. Builds SQL dynamically via <code>CONCAT</code>. Uses <code>MATCH(name, description) AGAINST(query IN BOOLEAN MODE)</code> for full-text search. <code>PREPARE / EXECUTE / DEALLOCATE</code> for dynamic queries.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-proc">PROCEDURE 8</span><span class="obj-name">sp_broadcast_promo(title, body)</span></div>
+  <p><code>INSERT INTO NOTIFICATIONS SELECT user_id FROM USERS WHERE role='customer'</code> — sends to all customers in one set operation. Returns <code>ROW_COUNT()</code> as notifications_sent.</p>
+
+  <div class="obj-header"><span class="obj-badge badge-proc">PROCEDURE 9</span><span class="obj-name">sp_order_timeline(order_id)</span></div>
+  <p>Full status history chronologically. <code>COALESCE(u.full_name, 'System')</code> shows "System" for trigger-initiated changes where changed_by is NULL.</p>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 10 — COMPLEX QUERIES
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s10">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">10</div>
+    <h2>Complex Queries</h2>
+  </div>
+
+  <h3>Q1 — Correlated Subquery: Products Above Category Average Price</h3>
+  <p>A correlated subquery references the outer query's columns. It executes once per outer row.</p>
+<pre>SELECT p.product_id, p.name, p.price, c.name AS category,
+  (SELECT ROUND(AVG(p2.price),2) FROM PRODUCTS p2
+   WHERE p2.category_id = p.category_id) AS cat_avg   -- correlated!
+FROM PRODUCTS p JOIN CATEGORIES c ON p.category_id = c.category_id
+WHERE p.price > (
+  SELECT AVG(p3.price) FROM PRODUCTS p3
+  WHERE p3.category_id = p.category_id  -- runs once per outer row
+)</pre>
+  <p>For each product, MySQL runs the inner SELECT with that product's category_id. In Smartphones (avg ~AED 4166): iPhone 15 Pro (4999) and Samsung S24 Ultra (4499) are above average; OnePlus 12 (2999) is below.</p>
+
+  <h3>Q2 — Nested Subquery: Customers Who Spent Above Average</h3>
+<pre>SELECT u.full_name, u.email, SUM(o.total_amount) AS total_spent
+FROM USERS u JOIN ORDERS o ON u.user_id = o.user_id
+WHERE o.status = 'delivered'
+GROUP BY u.user_id
+HAVING SUM(o.total_amount) > (
+  SELECT AVG(s.tot) FROM (        -- level 2
+    SELECT SUM(total_amount) AS tot
+    FROM ORDERS WHERE status = 'delivered'
+    GROUP BY user_id              -- level 1 (derived table)
+  ) s
+);</pre>
+  <p>Three levels: innermost = total per customer, middle = average of those totals, outer = customers above that average.</p>
+
+  <h3>Q3 — Window Function: Rank Products by Revenue Within Category</h3>
+<pre>SELECT product_name, category_name, revenue,
+  RANK() OVER (PARTITION BY category_name ORDER BY revenue DESC) AS cat_rank
+FROM vw_revenue_by_category;</pre>
+  <p><code>PARTITION BY</code> resets rank for each category. <code>RANK()</code> gives ties the same rank and skips next numbers (1,1,3). <code>DENSE_RANK()</code> would give 1,1,2. <code>ROW_NUMBER()</code> would give 1,2,3 regardless of ties.</p>
+
+  <h3>Q4 — EXISTS / NOT EXISTS: Buyers Who Never Reviewed</h3>
+<pre>SELECT u.user_id, u.full_name FROM USERS u
+WHERE EXISTS (SELECT 1 FROM ORDERS o WHERE o.user_id = u.user_id)
+  AND NOT EXISTS (SELECT 1 FROM REVIEWS r WHERE r.user_id = u.user_id);</pre>
+  <p><code>EXISTS</code> stops scanning on first match (short-circuit). <code>SELECT 1</code> is conventional — column doesn't matter, only row existence. Finds customers to target for review-request emails.</p>
+
+  <h3>Q5 — Multi-Level Join: Full Order Breakdown</h3>
+<pre>SELECT o.order_id, u.full_name, b.name AS brand, p.name AS product,
+  oi.quantity, oi.unit_price, (oi.quantity * oi.unit_price) AS line_total
+FROM ORDERS o
+JOIN USERS u       ON o.user_id    = u.user_id
+JOIN ORDER_ITEMS oi ON o.order_id  = oi.order_id
+JOIN PRODUCTS p    ON oi.product_id = p.product_id
+LEFT JOIN BRANDS b ON p.brand_id   = b.brand_id  -- LEFT: books have no brand
+ORDER BY o.order_id;</pre>
+  <p>5-table chain. LEFT JOIN on BRANDS preserves products without brands (books with brand_id = NULL).</p>
+
+  <h3>Q8 — Function Call in SELECT: Shipping Zone Rates</h3>
+<pre>SELECT sz.zone_name, sz.emirate,
+  fn_zone_shipping_fee(sz.emirate, 0) AS std_fee,    -- calls function
+  fn_zone_shipping_fee(sz.emirate, 1) AS express_fee,
+  sz.free_above
+FROM SHIPPING_ZONES sz WHERE sz.is_active = 1 ORDER BY sz.base_fee;</pre>
+  <p>Demonstrates calling a stored function inline in a SELECT.</p>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 11 — FRONTEND
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s11">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">11</div>
+    <h2>Frontend Architecture</h2>
+  </div>
+
+  <div class="table-wrap"><table>
+    <tr><th>Layer</th><th>Technology</th><th>Why</th></tr>
+    <tr><td>Framework</td><td>Next.js 14.2.5</td><td>App Router, TypeScript, React 18</td></tr>
+    <tr><td>Styling</td><td>Tailwind CSS</td><td>Utility-first, no custom CSS files needed</td></tr>
+    <tr><td>Animation</td><td>Framer Motion</td><td>whileInView, AnimatePresence, spring transitions</td></tr>
+    <tr><td>Icons</td><td>Lucide React</td><td>Consistent SVG icon set</td></tr>
+    <tr><td>Font</td><td>Inter (Google Fonts)</td><td>Clean, legible, modern</td></tr>
+    <tr><td>Deployment</td><td>GitHub Pages (static export)</td><td>Free hosting, no server required</td></tr>
+  </table></div>
+
+  <h3>Component Tree</h3>
+<pre>app/
+├── page.tsx           — Root: state, cart logic, Railway fetch, cart drawer
+├── layout.tsx         — HTML wrapper, font loading
+└── globals.css        — Tailwind base + scrollbar + utilities
+
+components/
+├── Navbar.tsx         — Fixed nav, scroll shadow, mobile menu, cart button
+├── HeroSection.tsx    — Featured product card, rating chip, CTA button
+├── ProductGrid.tsx    — Category filters, sort, AnimatePresence grid
+├── ProductCard.tsx    — Hover overlay, whileHover lift, add-to-cart
+├── StatsSection.tsx   — "50K+ customers, 4.9★" stats strip
+├── FeaturesSection.tsx— Free shipping / support feature cards
+└── TestimonialsSection.tsx — Customer quotes
+
+data/products.ts       — MOCK_PRODUCTS[8], FEATURED_PRODUCT
+types/product.ts       — TypeScript: Product, CartItem interfaces</pre>
+
+  <h3>Key State (page.tsx)</h3>
+<pre>const [products, setProducts]       = useState(MOCK_PRODUCTS);  // Railway or mock
+const [liveData, setLiveData]       = useState(false);           // badge indicator
+const [cartItems, setCartItems]     = useState([]);              // cart contents
+const [cartOpen, setCartOpen]       = useState(false);           // drawer toggle
+const [checkoutDone, setCheckoutDone] = useState(false);         // success state</pre>
+
+  <h3>Railway Integration with Fallback</h3>
+<pre>useEffect(() => {
+  fetch(`${RAILWAY_URL}/api/products`)
+    .then(r => r.json())
+    .then(data => {
+      // map Railway data → Product[] using MOCK_PRODUCTS for missing fields
+      setProducts(mapped);
+      setLiveData(true);   // show "Live · Railway DB" badge
+    })
+    .catch(() => {});      // silent fallback to MOCK_PRODUCTS
+}, []);</pre>
+
+  <h3>Cart Logic (functional update pattern)</h3>
+<pre>const addToCart = useCallback((product) => {
+  setCartItems(prev => {
+    const existing = prev.find(i => i.product.id === product.id);
+    if (existing)
+      return prev.map(i => i.product.id === product.id
+        ? { ...i, quantity: i.quantity + 1 } : i);
+    return [...prev, { product, quantity: 1 }];
+  });
+  showToast(`${product.name} added to cart`);
+}, [showToast]);</pre>
+  <p><code>setCartItems(prev => ...)</code> uses previous state directly — avoids stale closure bugs on rapid clicks. <code>useCallback</code> memoises the function to prevent child re-renders.</p>
+
+  <h3>Free Shipping Progress Bar</h3>
+<pre>const shippingFee = subtotal >= 200 ? 0 : 15;
+// JSX:
+&lt;div style={{ width: `${Math.min((subtotal / 200) * 100, 100)}%` }} /&gt;</pre>
+  <p><code>Math.min(..., 100)</code> prevents overflow when subtotal exceeds AED 200.</p>
+
+  <h3>Animations (Framer Motion)</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Component</th><th>Animation</th><th>Config</th></tr>
+    <tr><td>ProductCard</td><td>Fade in on scroll</td><td>whileInView opacity:1, y:0, duration 0.4s</td></tr>
+    <tr><td>ProductCard</td><td>Lift on hover</td><td>whileHover y: -3</td></tr>
+    <tr><td>Cart drawer</td><td>Slide in from right</td><td>initial x:"100%" → animate x:0 (spring)</td></tr>
+    <tr><td>Toast notifications</td><td>Pop up from bottom</td><td>initial opacity:0, y:20 → animate (spring)</td></tr>
+    <tr><td>Product grid</td><td>Fade between filters</td><td>AnimatePresence mode="wait" with exit y:10</td></tr>
+  </table></div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 12 — DEPLOYMENT
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s12">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">12</div>
+    <h2>Deployment</h2>
+  </div>
+
+  <h3>Backend — Railway</h3>
+  <p>Railway hosts the Node.js/Express REST API and database. <strong>Free tier sleeps after 15 minutes of inactivity.</strong></p>
+  <div class="card card-red">
+    <div class="card-title">Evaluation Day Action Required</div>
+    <p style="margin:0;font-size:13.5px">1. Open <strong>railway.app</strong> and log in<br/>2. Find the ShopSphere project<br/>3. Click <strong>Redeploy</strong> or wake the service<br/>4. Wait 10 seconds for cold start<br/>5. The "Live · Railway DB" badge on the site will turn green</p>
+  </div>
+
+  <h3>Frontend — GitHub Pages</h3>
+  <p>Next.js <code>output: "export"</code> generates fully static HTML/CSS/JS. GitHub Actions deploys it to the <code>main</code> branch root. GitHub Pages serves it.</p>
+<pre>// next.config.js
+output: "export"              // no server needed
+basePath: "/dbs2/shop"        // repo is named "dbs2", site is in /shop subfolder
+assetPrefix: "/dbs2/shop"     // CSS/JS assets load from correct path
+images: { unoptimized: true } // GitHub Pages can't run Next.js image optimizer</pre>
+
+  <h3>Why basePath Matters</h3>
+  <p>Without <code>basePath: "/dbs2/shop"</code>, internal links would generate <code>/products</code> but the actual URL is <code>/dbs2/shop/products</code> — causing 404s. The assetPrefix ensures <code>/_next/static/chunks/*.js</code> files load from <code>/dbs2/shop/_next/static/chunks/*.js</code>.</p>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 13 — CHEAT SHEET
+══════════════════════════════════════════════════════════ -->
+<div class="section" id="s13">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num">13</div>
+    <h2>Quick-Reference Cheat Sheet</h2>
+  </div>
+  <p style="color:var(--gray-500);font-size:13px;margin-bottom:1.5rem">Likely professor questions with model answers.</p>
+
+  <div class="qa-item">
+    <div class="qa-q">How many tables and what's the overall structure?</div>
+    <div class="qa-a">20 tables. Core entities: USERS, PRODUCTS, ORDERS, ORDER_ITEMS, PAYMENTS. Supporting normalisation: CATEGORIES (self-ref hierarchy), BRANDS (extracted for BCNF), ADDRESSES (extracted for 2NF), PRODUCT_IMAGES/ATTRIBUTES/TAGS (1NF). Operational: CART_ITEMS, WISHLISTS, REVIEWS, COUPONS. System: AUDIT_LOG, NOTIFICATIONS, ORDER_STATUS_HISTORY, SHIPPING_ZONES, TAGS, PRODUCT_TAGS.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">Why is BRANDS a separate table?</div>
+    <div class="qa-a">BCNF. Without it: product_id → brand_name → brand_country (transitive dependency — brand_name is not a superkey of PRODUCTS). With BRANDS: brand_id → {name, country, website} and product_id → brand_id only. Every non-trivial FD now has a superkey as determinant.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">Why does ORDER_ITEMS store unit_price?</div>
+    <div class="qa-a">Price snapshot. Product prices change over time. If we derived price from PRODUCTS.price, order history would show wrong amounts after price updates. Storing unit_price at order time ensures historical accuracy. It also removes the transitive dependency item_id → product_id → current_price.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What does the cursor in sp_place_order do?</div>
+    <div class="qa-a">A cursor iterates over the user's cart items row-by-row and inserts each as an ORDER_ITEMS row. This is necessary because Trigger 1 (stock check) fires per INSERT — we need per-row processing. CURSOR → OPEN → LOOP: FETCH INTO vars → INSERT ORDER_ITEMS (trigger fires here) → END LOOP → CLOSE.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What happens if stock runs out mid-order?</div>
+    <div class="qa-a">Trigger 1 (BEFORE INSERT on ORDER_ITEMS) fires for each item. If stock &lt; requested quantity, it calls SIGNAL SQLSTATE '45000'. This raises a user-defined exception. The EXIT HANDLER in sp_place_order catches it, calls ROLLBACK (undoes all INSERTs so far), sets order_id=-1, and RESIGNALs the error to the API caller.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">How does avg_rating stay up to date without a cron job?</div>
+    <div class="qa-a">Three AFTER triggers on REVIEWS: Trigger 4 (INSERT), Trigger 5 (UPDATE), Trigger 6 (DELETE). Each runs SELECT AVG(rating) and SELECT COUNT(*) on REVIEWS for that product and UPDATEs the PRODUCTS row. Trigger 6 uses COALESCE to return 0 when the last review is deleted (AVG of empty set = NULL).</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What is the EAV pattern and why use it?</div>
+    <div class="qa-a">Entity-Attribute-Value. PRODUCT_ATTRIBUTES stores flexible specs as rows: (product_id=1, attr_name='RAM', attr_value='8GB'). Used because different product categories have completely different specs — a smartphone has RAM/Storage/OS, a racket has weight/grip/string_tension. Adding 50+ nullable columns to PRODUCTS for all possible specs would be impractical.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">Explain SIGNAL SQLSTATE '45000'</div>
+    <div class="qa-a">MySQL's mechanism to raise a user-defined exception from inside a trigger or stored procedure. SQLSTATE '45000' = "unhandled user-defined exception". It aborts the current statement, propagates up through the call stack, and if inside a transaction will trigger a ROLLBACK unless caught by a DECLARE EXIT HANDLER FOR SQLEXCEPTION.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">Why does AUDIT_LOG have no foreign keys?</div>
+    <div class="qa-a">Intentional. An audit log must be immutable and permanent. If AUDIT_LOG.record_id had a FK to PRODUCTS, deleting a product would either cascade-delete its audit records (destroying the trail) or block deletion (data management problem). No FKs means the log is append-only and survives any table changes.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What normalization form is the schema in?</div>
+    <div class="qa-a">BCNF. 1NF: no multi-valued attributes (PRODUCT_IMAGES, PRODUCT_TAGS, PRODUCT_ATTRIBUTES tables). 2NF: addresses separated from orders (removed partial dependency). 3NF/BCNF: brands and categories extracted from products (removed transitive dependencies). Every non-trivial FD has a superkey as determinant.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">How does the frontend work without a server?</div>
+    <div class="qa-a">Next.js output:"export" generates a fully static site (HTML+CSS+JS). All data fetching is client-side via fetch() in useEffect hooks. The Railway backend is optional — if offline, the catch block in the useEffect silently keeps MOCK_PRODUCTS. The "Offline · Mock data" / "Live · Railway DB" badge shows which source is active.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What is the self-referencing FK in CATEGORIES?</div>
+    <div class="qa-a">parent_id FK → category_id in the same CATEGORIES table. NULL = top-level category. Electronics (id=1, parent=NULL) → Smartphones (id=6, parent=1). ON DELETE SET NULL means if Electronics is deleted, Smartphones becomes top-level rather than being deleted or orphaned.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">Explain the correlated subquery (Q1)</div>
+    <div class="qa-a">A correlated subquery references a column from the outer query. In Q1, the inner SELECT AVG(price) has WHERE p3.category_id = p.category_id — p.category_id comes from the outer row. MySQL re-runs the subquery for every outer row, using that row's category_id. This finds products priced above their category's average.</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What are the 7 coupon codes?</div>
+    <div class="qa-a">WELCOME10 (10%, any order, max AED 500), SUMMER20 (20%, min AED 200, max AED 800), FLASH50 (50%, min AED 1000, max AED 2000), VIP30 (30%, min AED 500, max AED 1500), STUDENT15 (15%, min AED 100, max AED 300), FLAT100 (AED 100 off, min AED 500), TECH500 (AED 500 off, min AED 5000).</div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">How does Trigger 14 (restock notifications) work?</div>
+    <div class="qa-a">AFTER UPDATE on PRODUCTS. Guard: OLD.stock_qty = 0 AND NEW.stock_qty &gt; 0 (product just restocked). Then INSERT...SELECT: inserts one notification row per row in WISHLISTS for that product_id. This is a set-based operation — one trigger execution could insert hundreds of notifications. Called implicitly by sp_restock_product.</div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════ -->
+<div class="report-footer">
+  <p>ShopSphere · CS F212 Database Systems · BITS Pilani Dubai · 2025–2026</p>
+  <p style="margin-top:6px">Team: Rehan · Mani · Raghav · Akhil · Zayed</p>
+</div>
+
+<script>
+  // Smooth scroll for TOC links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
