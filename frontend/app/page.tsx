@@ -11,7 +11,7 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import { MOCK_PRODUCTS, FEATURED_PRODUCT } from "@/data/products";
 import { CartItem, Product } from "@/types/product";
 
-const RAILWAY_URL = "https://shopsphere-production-4454.up.railway.app";
+const RAILWAY_URL = "https://shopsphere-api-production.up.railway.app";
 
 interface Toast { id: number; message: string; }
 let toastId = 0;
