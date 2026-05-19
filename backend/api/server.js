@@ -102,6 +102,30 @@ app.get("/api/orders", async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// POST /api/orders — place order via sp_place_order (uses demo user Alice)
+app.post("/api/orders", async (req, res) => {
+  try {
+    const { items } = req.body;
+    const demoUserId   = 2; // Alice
+    const demoAddrId   = 1; // Alice's home address
+
+    // 1. Clear Alice's cart and refill with current items
+    await pool.query("DELETE FROM CART_ITEMS WHERE user_id = ?", [demoUserId]);
+    for (const item of items) {
+      await pool.query(
+        "INSERT INTO CART_ITEMS (user_id, product_id, quantity) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quantity = ?",
+        [demoUserId, item.productId, item.quantity, item.quantity]
+      );
+    }
+
+    // 2. Call sp_place_order — triggers stock deduction, coupon usage etc.
+    await pool.query("CALL sp_place_order(?, ?, NULL, 'credit_card', 'Standard', @order_id, @msg)", [demoUserId, demoAddrId]);
+    const [[result]] = await pool.query("SELECT @order_id AS orderId, @msg AS message");
+
+    res.json({ success: true, orderId: result.orderId, message: result.message });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 // Order timeline
 app.get("/api/orders/:id/timeline", async (req, res) => {
   try {
